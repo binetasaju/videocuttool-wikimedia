@@ -6,6 +6,7 @@ stages:
   - test
 
 build:
+  image: node:18
   stage: build
   script:
     - npm ci --legacy-peer-deps

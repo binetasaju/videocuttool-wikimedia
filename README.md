@@ -74,13 +74,13 @@ cd ./VideoCutTool
 Run this command inside VideoCutTool to start development Docker container, if you operating system is Windows
 
 ```
-docker compose -f .\docker-compose.dev.yml up --build -V
+docker-compose -f .\docker-compose.dev.yml up --build -V
 ```
 
 If your operating system is other than Windows (Linux/Mac), run this command instead
 
 ```
-docker compose -f ./docker-compose.dev.yml up --build -V
+docker-compose -f ./docker-compose.dev.yml up --build -V
 ```
 
 The first time you run it will take some time (4-8 minutes depending on your internet speed) because it will pull the necessary images from Docker and install NPM packages. Once it is up and running changes will be hot loaded.
@@ -90,7 +90,7 @@ The first time you run it will take some time (4-8 minutes depending on your int
 To run production you can run this command:
 
 ```
-docker compose -f .\docker-compose.prd.yml up -d
+docker-compose -f .\docker-compose.prd.yml up -d
 ```
 
 for windows
@@ -98,7 +98,7 @@ for windows
 and
 
 ```
-docker compose -f ./docker-compose.prd.yml up -d
+docker-compose -f ./docker-compose.prd.yml up -d
 ```
 
 for other operating systems.

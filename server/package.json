@@ -8,7 +8,7 @@
 		"serve": "nodemon index.js --legacy-watch --trace-warnings",
 		"start:prod": "node index.js",
 		"stop:prod": "pm2 stop app-server",
-		"test": "jest"
+		"test": "pm2 stop app-server"
 	},
 	"dependencies": {
 		"concurrently": "^7.2.2",
@@ -27,9 +27,7 @@
 		"verbose": "^0.2.3"
 	},
 	"devDependencies": {
-		"jest": "^29.6.4",
 		"nodemon": "^2.0.16",
-		"pug": "^3.0.2",
-		"supertest": "^6.3.3"
+		"pug": "^3.0.2"
 	}
 }

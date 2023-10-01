@@ -8,7 +8,7 @@ const fsPromises = fs.promises;
 /**
  * Convert time to milliseconds
  *
- * @param {string} time The time string to convert to ms
+ * @param {string} time The time string to convert to ms (e.g. 1:30:20.56)
  * @returns {string} Converted time string
  */
 function convertTimeToMs(time) {
@@ -390,6 +390,7 @@ async function moveVideosToPublic(videoPaths) {
 }
 
 module.exports = {
+	convertTimeToMs,
 	deleteFiles,
 	downloadVideo,
 	concatVideos,

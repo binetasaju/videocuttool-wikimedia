@@ -28,11 +28,11 @@ function convertTimeToMs(time) {
  */
 function deleteFiles(files) {
 	if (!Array.isArray(files)) {
-		fs.unlink(files, () => { });
+		fs.unlink(files, () => {});
 		return;
 	}
 	files.forEach(file => {
-		fs.unlink(file, () => { });
+		fs.unlink(file, () => {});
 	});
 }
 
@@ -377,7 +377,7 @@ async function moveVideosToPublic(videoPaths) {
  * @param {string} videoDownloadPath Details of the downloaded video path
  * @returns {string} String with video path on success, or error property on failure
  */
-async function download(url,videoDownloadPath) {
+async function download(url, videoDownloadPath) {
 	const command = `ffmpeg -y -i "${url}" -vcodec copy -acodec copy '${videoDownloadPath}'`;
 
 	exec(command, (error, stdout, stderr) => {
@@ -388,12 +388,12 @@ async function download(url,videoDownloadPath) {
 
 		console.log(`Standard Output:\n${stdout}`);
 		console.error(`Standard Error:\n${stderr}`);
-
 	});
 	return videoDownloadPath;
 }
 
 module.exports = {
+	convertTimeToMs,
 	deleteFiles,
 	concatVideos,
 	trimVideos,

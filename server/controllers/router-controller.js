@@ -1,5 +1,4 @@
 const path = require('path');
-const { Worker } = require('worker_threads');
 const fs = require('fs');
 const { randomUUID } = require('crypto');
 const User = require('../models/User.js');
@@ -8,7 +7,6 @@ const utils = require('../utils.js');
 const Video = require('../models/Video.js');
 const Settings = require('../models/Settings.js');
 const { blob } = require('stream/consumers');
-
 
 const uploadVideos = async (req, res) => {
 	const { CLIENT_ID, CLIENT_SECRET, BASE_WIKI_URL } = config();
@@ -152,11 +150,11 @@ const uploadVideos = async (req, res) => {
 		return res.status(status).send({ success, message, type, warnings });
 	}
 };
-const getVideoDownloadPathById = async (videoId) => {
+const getVideoDownloadPathById = async videoId => {
 	try {
 		const video = await Video.findOne({
 			where: { id: videoId },
-			attributes: ['videoDownloadPath'],
+			attributes: ['videoDownloadPath']
 		});
 		if (!video) {
 			throw new Error('Video not found');
@@ -168,15 +166,16 @@ const getVideoDownloadPathById = async (videoId) => {
 	}
 };
 const processVideo = async (req, res) => {
+	const videoQueue = req.app.get('videoQueue');
+	const videoWorkersList = req.app.get('videoWorkersList');
 	const io = req.app.get('socketio');
-
-	const videoId = req.body.videoid;
+	const redis = req.app.get('redis');
 
 	let videoIdResponse = '';
 	try {
 		const { crop, inputVideoUrl, trimMode, trims, modified, rotateValue, videoName, volume } =
 			JSON.parse(req.body.data);
-
+		const videoId = req.body.videoId;
 		const videoDownloadPath = await getVideoDownloadPathById(videoId);
 
 		const user = JSON.parse(req.body.user);
@@ -188,66 +187,75 @@ const processVideo = async (req, res) => {
 			throw e;
 		}
 
-		const SettingsData = {
-			trims,
-			trimMode,
-			crop,
-			modified,
-			rotateValue,
-			volume,
-			VideoId: videoId
-		};
-		await Settings.update(SettingsData, { where: { VideoId: videoId } });
+		const activeSockets = JSON.parse(await redis.get('activeSockets'));
 
 		videoIdResponse = JSON.stringify({ videoId: videoId });
 
-		const worker = new Worker(path.resolve(__dirname, '../worker.js'), {
-			workerData: {
-				_id: videoId,
-				inputVideoUrl,
-				videoDownloadPath,
-				videoName,
-				settings: {
-					trims,
-					trimMode,
-					crop,
-					modified,
-					rotateValue,
-					volume
+		await videoQueue.add(videoId, {
+			_id: videoId,
+			inputVideoUrl,
+			videoDownloadPath,
+			videoName,
+			mediawikiId: user.mediawikiId,
+			settings: {
+				trims,
+				trimMode,
+				crop,
+				modified,
+				rotateValue,
+				volume
+			}
+		});
+
+		videoWorkersList.forEach(worker => {
+			worker.on('completed', async job => {
+				const videos = job.returnvalue;
+				const videosWithNewPaths = await utils.moveVideosToPublic(videos.convertFormat);
+
+				worker.emit('progress', {
+					type: 'server-side-and-frontend-update',
+					videoId: videos.videoId,
+					mediawikiId: videos.mediawikiId,
+					data: {
+						video_id: videos.videoId,
+						status: 'done',
+						videos: videosWithNewPaths,
+						timeTaken: videos.timeTaken
+					}
+				});
+			});
+
+			worker.on('progress', async payload => {
+				console.log(payload);
+				const mediawikiId = payload.mediawikiId;
+				if (payload.type.includes('frontend')) {
+					io.to(activeSockets[mediawikiId]).emit('progress:update', payload.data);
 				}
-			}
-		});
+				if (payload.data.status === 'processing') {
+					await Video.update(
+						{ status: payload.data.status, stage: payload.data.stage },
+						{ where: { id: payload.videoId } }
+					);
+				} else if (payload.data.status === 'done') {
+					Video.update(
+						{ status: payload.data.status, stage: 'done', videoPublicPaths: payload.data.videos },
+						{ where: { id: payload.videoId } }
+					);
+				} else {
+					Video.update(
+						{ status: payload.data.status, errorData: payload.data.error },
+						{ where: { id: payload.videoId } }
+					);
+				}
+			});
 
-		// Listen for a message from worker
-		worker.on('message', async payload => {
-			console.log(payload);
-			if (payload.type.includes('frontend')) {
-				io.to(user.socketId).emit('progress:update', payload.data);
-			}
-			if (payload.data.status === 'processing') {
-				await Video.update(
-					{ status: payload.data.status, stage: payload.data.stage },
-					{ where: { id: payload.videoId } }
-				);
-			} else if (payload.data.status === 'done') {
-				Video.update(
-					{ status: payload.data.status, stage: 'done', videoPublicPaths: payload.data.videos },
-					{ where: { id: payload.videoId } }
-				);
-			} else {
-				Video.update(
-					{ status: payload.data.status, errorData: payload.data.error },
-					{ where: { id: payload.videoId } }
-				);
-			}
-		});
-
-		worker.on('error', error => {
-			console.log('WORKER ERROR', error);
-			const workerError = new Error('error-worker');
-			workerError.success = false;
-			workerError.status = 400;
-			throw workerError;
+			worker.on('error', error => {
+				console.log('WORKER ERROR', error);
+				const workerError = new Error('error-worker');
+				workerError.success = false;
+				workerError.status = 400;
+				throw workerError;
+			});
 		});
 	} catch (err) {
 		console.log(err);
@@ -293,8 +301,7 @@ const registerVideo = async (req, res) => {
 		}
 		if (url.includes('wikimedia')) {
 			await utils.download(url, videoDownloadPath);
-		}
-		else {
+		} else {
 			await new Promise((resolve, reject) => {
 				uploadedFile.mv(videoDownloadPath, err => (err ? reject(err) : resolve()));
 			});
@@ -331,7 +338,7 @@ const registerVideo = async (req, res) => {
 		const { status, message, success } = err;
 		return res.status(status).send({ success, message });
 	}
-}
+};
 
 module.exports = {
 	downloadVideo,

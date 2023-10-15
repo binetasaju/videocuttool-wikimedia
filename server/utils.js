@@ -39,6 +39,8 @@ function deleteFiles(files) {
 /**
  * Spawn function wrapped in Promise object
  *
+ * @param {worker} worker BullMQ worker
+ * @param {string} mediawikiId user ID
  * @param {array} args Array of ffmpeg flags
  * @param {string} stage Current processing stage
  * @param {int} videoId Video ID
@@ -46,10 +48,12 @@ function deleteFiles(files) {
  * @param {obj} trimDuration Object to calculate trim duration. Used for trimming stage
  * @returns {obj} A reject or resolve promise
  */
-function spawnAsyn(args, stage, videoId, resolveObj = {}, trimDuration = {}) {
-	parentPort.postMessage({
+function spawnAsyn(worker, mediawikiId, args, stage, videoId, resolveObj = {}, trimDuration = {}) {
+	// Send update to client
+	worker.emit('progress', {
 		type: 'server-side-update',
 		videoId,
+		mediawikiId,
 		data: {
 			status: 'processing',
 			stage
@@ -118,9 +122,10 @@ function spawnAsyn(args, stage, videoId, resolveObj = {}, trimDuration = {}) {
 				}
 
 				// Send to parent process
-				parentPort.postMessage({
+				worker.emit('progress', {
 					type: 'frontend-update',
 					videoId,
+					mediawikiId,
 					data: {
 						status: 'processing',
 						video_id: videoId,
@@ -148,14 +153,39 @@ function spawnAsyn(args, stage, videoId, resolveObj = {}, trimDuration = {}) {
 }
 
 /**
+ * Async function to download video before processing
+ *
+ * @param {worker} worker BullMQ worker
+ * @param {string} mediawikiId User ID
+ * @param {string} url Url of the video
+ * @param {obj} videoInfo Details of the video
+ * @returns {obj} Object with video path on success, or error property on failure
+ */
+async function downloadVideo(worker, mediawikiId, url, videoInfo) {
+	const { videoName = url, videoId } = videoInfo;
+	const videoExtension = videoName.split('.').pop().toLowerCase();
+	const videoDownloadPath = path.join(
+		__dirname,
+		'videos',
+		`video_${Date.now()}_${parseInt(Math.random() * 10000, 10)}.${videoExtension}`
+	);
+	const cmdArray = ['-y', '-i', url, '-vcodec', 'copy', '-acodec', 'copy', videoDownloadPath];
+	return spawnAsyn(worker, mediawikiId, cmdArray, 'downloading', videoId, {
+		videoPath: videoDownloadPath
+	});
+}
+
+/**
  * Perform different manipulations on video (disable audio, rotation
  * and cropping)
  *
+ * @param {worker} worker BullMQ worker
+ * @param {string} mediawikiId User ID
  * @param {obj} videoInfo Object containing video info
  * @param {obj} manipulations Type of manipulations to perform
  * @returns {obj} Promise object
  */
-async function manipulateVideo({ videoId, videoPath }, manipulations) {
+async function manipulateVideo(worker, mediawikiId, { videoId, videoPath }, manipulations) {
 	const { disable_audio, rotate, crop, trim, volume } = manipulations;
 
 	let cmdArray = [];
@@ -205,7 +235,9 @@ async function manipulateVideo({ videoId, videoPath }, manipulations) {
 		const videoExtension = videoPath.split('.').pop().toLowerCase();
 		const destination = path.join(__dirname, 'videos', `video-${Date.now()}.${videoExtension}`);
 		cmdArray.push(`${destination}`);
-		return spawnAsyn(cmdArray, 'manipulations', videoId, { newVideoPath: destination });
+		return spawnAsyn(worker, mediawikiId, cmdArray, 'manipulations', videoId, {
+			newVideoPath: destination
+		});
 	}
 	return cmdArray;
 }
@@ -213,11 +245,19 @@ async function manipulateVideo({ videoId, videoPath }, manipulations) {
 /**
  * Async function to trim videos as required
  *
+ * @param {worker} worker BullMQ worker
+ * @param {string} mediawikiId User ID
  * @param {obj} videoInfo Object containing video info
  * @param {array} trims Array of trim settings
  * @returns {obj} Promise object
  */
-async function trimVideos({ videoId, videoPath }, trims, manipulations = null) {
+async function trimVideos(
+	worker,
+	mediawikiId,
+	{ videoId, videoPath },
+	trims,
+	manipulations = null
+) {
 	const trimsLocations = [];
 	const videoExtension = videoPath.split('.').pop().toLowerCase();
 
@@ -248,11 +288,19 @@ async function trimVideos({ videoId, videoPath }, trims, manipulations = null) {
 			// Since manipulateVideo function will return that value
 			cmdArray.pop();
 
-			const addManipulations = await manipulateVideo({}, manipulations);
+			const addManipulations = await manipulateVideo(worker, mediawikiId, {}, manipulations);
 			cmdArray = [...cmdArray, ...addManipulations, destination];
 		}
 
-		return spawnAsyn(cmdArray, 'trimming', videoId, { trimsLocations }, element);
+		return spawnAsyn(
+			worker,
+			mediawikiId,
+			cmdArray,
+			'trimming',
+			videoId,
+			{ trimsLocations },
+			element
+		);
 	}, Promise.resolve());
 
 	return trimVideo;
@@ -261,10 +309,12 @@ async function trimVideos({ videoId, videoPath }, trims, manipulations = null) {
 /**
  * Concatenate video after trimming (in single mode)
  *
+ * @param {worker} worker BullMQ worker
+ * @param {string} mediawikiId User ID
  * @param {obj} videoInfo Object containing video info
  * @returns {obj} Promise object
  */
-async function concatVideos({ videoId, videoPaths }) {
+async function concatVideos(worker, mediawikiId, { videoId, videoPaths }) {
 	const videosListFileName = path.join(__dirname, 'videos', `filelist-${Date.now()}`);
 	videoPaths.forEach(videoLocation => {
 		fs.appendFileSync(videosListFileName, `file '${videoLocation}'\n`);
@@ -287,16 +337,18 @@ async function concatVideos({ videoId, videoPaths }) {
 		'copy',
 		concatenatedLocation
 	];
-	return spawnAsyn(cmdArray, 'contacting', videoId, { concatenatedLocation });
+	return spawnAsyn(worker, mediawikiId, cmdArray, 'contacting', videoId, { concatenatedLocation });
 }
 
 /**
  * Convert video format if not webm or ogv
  *
+ * @param {worker} worker BullMQ worker
+ * @param {string} mediawikiId User ID
  * @param {obj} videoInfo Object containing video info
  * @returns {obj} Promise object
  */
-async function convertVideoFormat({ videoId, videoPaths }) {
+async function convertVideoFormat(worker, mediawikiId, { videoId, videoPaths }) {
 	let videoPathsArray = videoPaths;
 	if (!Array.isArray(videoPaths)) {
 		videoPathsArray = [videoPaths];
@@ -329,7 +381,7 @@ async function convertVideoFormat({ videoId, videoPaths }) {
 				'libopus',
 				convertedLocation
 			];
-			return spawnAsyn(cmdArray, 'converting', videoId);
+			return spawnAsyn(worker, mediawikiId, cmdArray, 'converting', videoId);
 		}
 
 		console.log('video is already in supported format: ', videoExtension, ', skipping...');
@@ -350,6 +402,12 @@ async function convertVideoFormat({ videoId, videoPaths }) {
 	return convertedLocations;
 }
 
+/**
+ *
+ * Move videos to public folder
+ * @param {array} videoPaths Array of video paths
+ * @returns {array} Array of video paths
+ */
 async function moveVideosToPublic(videoPaths) {
 	const currentDate = Date.now();
 	const videos = [];

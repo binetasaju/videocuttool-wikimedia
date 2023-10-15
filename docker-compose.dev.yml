@@ -1,5 +1,16 @@
 version: '3.7'
 services:
+  videocuttool-redis:
+    container_name: videocuttool-redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    volumes:
+      - type: tmpfs
+        target: /data
+        volume:
+          nocopy: true
   videcuttool-server:
     container_name: videcuttool-server
     build:
@@ -17,6 +28,7 @@ services:
       - FAST_REFRESH=true
       - DB_CONNECTION_URL=postgresql://videocuttool:videocuttool@database:5432/videocuttool
       - BACKEND_URL=http://videcuttool-server:4000/api/
+      - WORKER_LIMIT=${WORKER_LIMIT:-2}
     env_file:
       - .env.dev
     depends_on:

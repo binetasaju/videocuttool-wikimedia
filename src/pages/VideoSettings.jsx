@@ -33,7 +33,6 @@ import ENV_SETTINGS from '../env';
 import Footer from '../components/Footer';
 import Notification from '../components/Notification';
 
-
 /**
  * Handle videos settings UI and actions
  * @param {object} props Inherited props
@@ -41,9 +40,17 @@ import Notification from '../components/Notification';
  */
 function VideoSettings() {
 	const { updateAppState, appState } = useContext(GlobalContext);
-	const { socketId ,notifications} = appState;
+	const { socketId, notifications } = appState;
 	const { currentUser } = useContext(UserContext);
-	const { videoUrl, currentSubStep, setCurrentSubStep, file, videoId, setVideoUrl, setVideoDetails } = useContext(VideoDetailsContext);
+	const {
+		videoUrl,
+		currentSubStep,
+		setCurrentSubStep,
+		file,
+		videoId,
+		setVideoUrl,
+		setVideoDetails
+	} = useContext(VideoDetailsContext);
 
 	const videoPlayer = useRef(null);
 	const trims = useRef(null);
@@ -396,13 +403,12 @@ function VideoSettings() {
 
 		// if user is not logged in, this would be empty object
 		const userinfo = {
-			...currentUser,
-			...(socketId && { socketId })
+			...currentUser
 		};
 
 		setCurrentSubStep('process');
 		const formData = new FormData();
-		formData.append("videoid", videoId)
+		formData.append('videoId', videoId);
 		formData.append('data', JSON.stringify(settingData));
 		formData.append('user', JSON.stringify(userinfo));
 		await processVideo(formData, updateAppState, setCurrentSubStep);
@@ -573,7 +579,7 @@ function VideoSettings() {
 		<div id="main-container">
 			<Header apiUrl={backendUrl} />
 			<div id="content" className="flex-column">
-			<div className="logo-wrapper flex-sm-row">
+				<div className="logo-wrapper flex-sm-row">
 					<span className="menu-icon" data-testid="sidebar-toggle-button" onClick={toggleHeader}>
 						<List size="25" />
 					</span>
@@ -586,7 +592,8 @@ function VideoSettings() {
 				<Footer />
 			</div>
 			{notifications && notifications.length > 0 && <Notification />}
-		</div>);
+		</div>
+	);
 }
 
 export default VideoSettings;

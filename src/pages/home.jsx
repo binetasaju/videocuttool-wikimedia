@@ -7,14 +7,13 @@ import { GlobalContext } from '../context/GlobalContext';
 import { UserContext } from '../context/UserContext';
 import { socket } from '../utils/socket';
 import Notification from '../components/Notification';
-import { clearItems, getStoredItem,storeItem } from '../utils/storage';
+import { clearItems, getStoredItem, storeItem } from '../utils/storage';
 import ENV_SETTINGS from '../env';
 import { Message } from '@wikimedia/react.i18n';
 import logo from '../logo.svg';
 import '../style/main.scss';
 import '../style/dark-theme.scss';
 import Footer from '../components/Footer';
-
 
 const { backend_url: backendUrl, phab_link, base_wiki_url } = ENV_SETTINGS();
 const currentUser = getStoredItem('user');
@@ -33,7 +32,7 @@ socket.on('connect_error', err => {
 function Home() {
 	const { appState, updateAppState } = useContext(GlobalContext);
 	const { notifications } = appState || {};
-	const {  setCurrentUser } = useContext(UserContext);
+	const { setCurrentUser } = useContext(UserContext);
 
 	const [showHeader, setShowHeader] = useState(false);
 	const [title, setTitle] = useState('');

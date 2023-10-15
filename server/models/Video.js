@@ -11,7 +11,7 @@ Video.init(
 			primaryKey: true
 		},
 		url: {
-			type:DataTypes.STRING,
+			type:DataTypes.TEXT,
 			defaultValue:'',
 		},
 		videoDownloadPath: DataTypes.STRING,

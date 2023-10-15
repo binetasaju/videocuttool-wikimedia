@@ -15,7 +15,6 @@ const GlobalContextProvider = function GlobalContextProvider(props) {
 	const initialAppState = {
 		themeMode: localStorage.getItem('theme') || 'light',
 		socket: null,
-		socketId: null,
 		current_locale: JSON.parse(localStorage.getItem('localeObj')) || defaultLocaleObj,
 		notifications: []
 	};

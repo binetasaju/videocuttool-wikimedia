@@ -9,7 +9,8 @@ import {
 	Crop,
 	PlayCircle,
 	XCircle,
-	VolumeDownFill
+	VolumeDownFill,
+	ArrowLeft
 } from 'react-bootstrap-icons';
 import { Message } from '@wikimedia/react.i18n';
 import { GlobalContext } from '../context/GlobalContext';
@@ -40,7 +41,7 @@ import Notification from '../components/Notification';
  */
 function VideoSettings() {
 	const { updateAppState, appState } = useContext(GlobalContext);
-	const { socketId, notifications } = appState;
+	const { socketId, notifications, themeMode } = appState;
 	const { currentUser } = useContext(UserContext);
 	const {
 		videoUrl,
@@ -251,7 +252,6 @@ function VideoSettings() {
 	const changeRotation = newRotateValue => {
 		if (newRotateValue < 0) newRotateValue = 3;
 		if (newRotateValue > 3) newRotateValue = 0;
-
 		const videoEl = document.querySelector('#video-player video');
 		const videoWidth = videoEl.offsetWidth;
 		const videoHeight = videoEl.offsetHeight;
@@ -276,6 +276,7 @@ function VideoSettings() {
 			modified: newRotateValue !== 3,
 			values: `(${transformRotate}°)`
 		});
+		console.log(currentSetting);
 	};
 
 	/**
@@ -421,9 +422,148 @@ function VideoSettings() {
 		setVideoReady(true);
 	};
 
+	const [hash, setHash] = useState([1, 1, 1, 1, 1]);
+	const [showSubEdits, setShowSubEdits] = useState(false);
+
+	// Function to set an element at a specific index to 1
+	const setAtIndexToOne = (index) => {
+		if (index >= 0 && index < hash.length) {
+			const updatedHash = hash.fill(0); // Create a copy of the original array
+			updatedHash[index] = 1; // Change the value at the specified index to 1
+			setHash(updatedHash);
+		} else {
+			console.error('Invalid index'); // Handle invalid index
+		}
+	};
+
 	const settingsComponent = (
 		<div id="video-settings">
+			<div className="d-flex flex-column pb-3">
+				<div className="ms-auto d-flex">
+					<Button
+						variant="primary"
+						className="me-3"
+						disabled={canPreview === false}
+						onClick={processvideo}
+						size="sm"
+					>
+						{/* <PlayCircle /> */}
+						<span className="setting-title">
+							<Message id="preview-text" />
+						</span>
+					</Button>
+
+					<Button
+						variant="danger"
+						disabled={currentSetting.modified === false}
+						onClick={undoChanges}
+						size="sm"
+					>
+						{/* <XCircle /> */}
+						<span className="setting-title">
+							<Message id="reset-text" />
+						</span>
+					</Button>
+				</div>
+			</div>
 			<div className="video-wrapper">
+				<div style={{ display: 'flex', flexDirection: 'column' }}>
+					<ToggleButtonGroup
+						name="manipulations"
+						className="video-manipulation-group"
+						aria-label="Video Manipulation"
+						vertical
+						style={{ backgroundColor: 'white' }}
+					>
+						{hash.filter(value => value === 0).length === 4 && (
+							<ToggleButton
+								variant={themeMode}
+								id="video-manipulation-4"
+								onChange={() => {
+									setHash([1, 1, 1, 1, 1])
+									setShowSubEdits(false);
+								}}
+								type="radio"
+								name="manipulation"
+								checked={currentSetting.type === settings[4].type}
+							>
+								<ArrowLeft size={18} />
+								{/* {settings[4].modified && <span className="modified" />} */}
+							</ToggleButton>
+						)}
+
+						{hash[1] ? <ToggleButton
+							variant={themeMode}
+							id="video-manipulation-1"
+							onChange={() => {
+								changeRotation(videoManipulationData.current.rotate_value + 1);
+								setCurrentSetting(settings[1])
+							}}
+							type="radio"
+							name="manipulation"
+							checked={currentSetting.type === settings[1].type}
+						>
+							<ArrowClockwise size={18} />
+							{/* {settings[1].modified && <span className="modified" />} */}
+						</ToggleButton> : ''
+						}
+						{hash[2] ? <ToggleButton
+							variant={themeMode}
+							id="video-manipulation-2"
+							onChange={() => {
+								setCurrentSetting(settings[2])
+								setAtIndexToOne(2);
+								setShowSubEdits(true);
+							}}
+							type="radio"
+							name="manipulation"
+							checked={currentSetting.type === settings[2].type}
+						>
+							<Scissors size={18} />
+
+						</ToggleButton> : ''}
+
+						{hash[3] ? <ToggleButton
+							variant={themeMode}
+							id="video-manipulation-3"
+							onChange={() => {
+								setCurrentSetting(settings[3])
+								setAtIndexToOne(3);
+								setShowSubEdits(true);
+							}}
+							type="radio"
+							name="manipulation"
+							checked={currentSetting.type === settings[3].type}
+						>
+							<Crop size={18} />
+							{/* {settings[3].modified && <span className="modified" />} */}
+						</ToggleButton> : ''}
+						{hash[4] ? <ToggleButton
+							variant={themeMode}
+							id="video-manipulation-4"
+							onChange={() => {
+								setCurrentSetting(settings[4]);
+								setAtIndexToOne(4);
+								setShowSubEdits(true);
+							}}
+							type="radio"
+							name="manipulation"
+							checked={currentSetting.type === settings[4].type}
+						>
+							<VolumeDownFill size={18} />
+							{/* {settings[4].modified && <span className="modified" />} */}
+						</ToggleButton> : ''}
+
+
+					</ToggleButtonGroup>
+					{showSubEdits ? <div className="video-manipulations-options">
+						{currentSetting.type === 'volume' && (
+							<div className="vertical-slider">
+								<Slider title="Volume" onChange={changeVolume} value={currentVolume} />
+							</div>
+						)}
+					</div> : ''}
+				</div>
 				<VideoPlayer ref={videoPlayer} videoUrl={videoUrl} onCanPlay={videoCanPlay}>
 					{videoPlayer.current && (
 						<DragResize
@@ -436,136 +576,18 @@ function VideoSettings() {
 					)}
 				</VideoPlayer>
 			</div>
-			{isModified && (
-				<div className="d-flex justify-content-center">
-					<Message id="enabled-features" placeholders={[changes.join()]} />
-				</div>
-			)}
-			<div className="video-manipulations mt-5">
-				<div className="video-manipulation-controls d-flex flex-column flex-md-row">
-					<ToggleButtonGroup
-						name="manipulations"
-						className="video-manipulation-group"
-						aria-label="Video Manipulation"
-					>
-						{settings.map((setting, idx) => (
-							<ToggleButton
-								variant="primary"
-								id={`video-manipulation-${idx}`}
-								key={idx}
-								onChange={() => setCurrentSetting(setting)}
-								type="radio"
-								name="manipulation"
-								checked={currentSetting.type === setting.type}
-							>
-								<setting.icon size={18} />
-								{currentSetting.type === setting.type && (
-									<span className="setting-title">
-										<Message id={setting.title_id} />
-									</span>
-								)}
-								{setting.modified && <span className="modified" />}
-							</ToggleButton>
-						))}
-					</ToggleButtonGroup>
-					<div className="action-buttons-group ms-md-auto d-flex mt-3 mt-md-0">
-						<Button
-							variant="primary"
-							className="me-5"
-							disabled={canPreview === false}
-							onClick={processvideo}
-						>
-							<PlayCircle />
-							<span className="setting-title">
-								<Message id="preview-text" />
-							</span>
-						</Button>
+			<div className="video-manipulations">
 
-						<Button
-							variant="danger"
-							disabled={currentSetting.modified === false}
-							onClick={undoChanges}
-						>
-							<XCircle />
-							<span className="setting-title">
-								<Message id="reset-text" />
-							</span>
-						</Button>
-					</div>
-				</div>
-				<div className="video-manipulations-options mt-4">
-					{currentSetting.type === 'rotate' && (
-						<div className="rotate-options">
-							<ButtonGroup className="me-2">
-								<Button
-									onClick={() => changeRotation(videoManipulationData.current.rotate_value - 1)}
-								>
-									<ArrowCounterclockwise size={18} />
-									<span className="setting-title">
-										<Message id="rotate-left" />
-									</span>
-								</Button>
-								<Button
-									onClick={() => changeRotation(videoManipulationData.current.rotate_value + 1)}
-								>
-									<ArrowClockwise size={18} />
-									<span className="setting-title">
-										<Message id="rotate-right" />
-									</span>
-								</Button>
-							</ButtonGroup>
-						</div>
-					)}
-					{currentSetting.type === 'mute' && (
-						<div className="volume-options">
-							<ToggleButtonGroup name="mute" className="me-2">
-								<ToggleButton
-									variant="primary"
-									onClick={() => muteAudio(true)}
-									type="radio"
-									name="mute-options"
-									checked={videoManipulationData.current.mute === true}
-								>
-									<VolumeMute size={18} />
-									{videoManipulationData.current.mute === true && (
-										<span className="setting-title">
-											<Message id="mute-disable" />
-										</span>
-									)}
-								</ToggleButton>
-								<ToggleButton
-									variant="primary"
-									type="radio"
-									name="mute-options"
-									onClick={() => muteAudio(false)}
-									checked={videoManipulationData.current.mute === false}
-								>
-									<VolumeUpFill size={18} />
-									{videoManipulationData.current.mute === false && (
-										<span className="setting-title">
-											<Message id="mute-enable" />
-										</span>
-									)}
-								</ToggleButton>
-							</ToggleButtonGroup>
-						</div>
-					)}
-					{currentSetting.type === 'volume' && (
-						<div className="volume-options">
-							<Slider title="Volume" onChange={changeVolume} value={currentVolume} />
-						</div>
-					)}
-					{videoPlayer.current && (
-						<Trim
-							hash={trimHash.current}
-							display={currentSetting.type === 'trim'}
-							player={videoPlayer.current}
-							videoSelector="#video-player video"
-							videoReady={videoAttr.canplay}
-							trimsUpdater={updateTrimsFromChild}
-						/>
-					)}
-				</div>
+				{videoPlayer.current && (
+					<Trim
+						hash={trimHash.current}
+						display={currentSetting.type === 'trim'}
+						player={videoPlayer.current}
+						videoSelector="#video-player video"
+						videoReady={videoAttr.canplay}
+						trimsUpdater={updateTrimsFromChild}
+					/>
+				)}
 			</div>
 		</div>
 	);

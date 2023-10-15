@@ -8,6 +8,8 @@ import Authentication from './Authentication';
 import DarkModeToggle from './DarkModeToggle';
 import GeneralPopover from './GeneralPopover';
 import { Message } from '@wikimedia/react.i18n';
+import languageIcon from "../language-dark.svg";
+import languageIcon2 from "../language-light.svg"
 
 function Header(props) {
 	const { appState, updateAppState } = useContext(GlobalContext);
@@ -51,9 +53,8 @@ function Header(props) {
 		title: 'Choose your language',
 		body: Object.keys(localesList).map((code, index) => (
 			<div
-				className={`locale-item ${
-					currentLocale && localesList[code].locale === currentLocale.locale && 'active'
-				}`}
+				className={`locale-item ${currentLocale && localesList[code].locale === currentLocale.locale && 'active'
+					}`}
 				title={localesList[code].name}
 				value={localesList[code].locale}
 				onClick={() => updateLocaleState(localesList[code])}
@@ -71,9 +72,11 @@ function Header(props) {
 			</div>
 			<div className="logo-wrapper">
 				<Image alt="logo" src={logo} width="100" height="40" />
-				<h1 className="text-white">
+
+				<h1 >
 					<Message id="title" />
 				</h1>
+
 			</div>
 			<div className="site">
 				<div className="darkmode-button-phone">
@@ -93,70 +96,39 @@ function Header(props) {
 							title={currentLocale && currentLocale.native_name}
 						>
 							<span className="option-icon">
-								<Globe2 />
+								{themeMode === "dark" ? <img className='lang-icon' src={languageIcon} alt="" /> : <img className='lang-icon' src={languageIcon2} alt="" />}
 							</span>
 							<span className="option-title">{localeName.current}</span>
 						</span>
 					</OverlayTrigger>
 				</div>
 			</div>
-			<div className="user-wrapper">
-				<Authentication  />
-				<Dropdown autoClose={false}>
-					<Dropdown.Toggle
-						variant="secondary"
-						style={{ background: 'transparent', border: 'none' }}
-						size="sm"
+			<div className='header-style'>
+				<div className="site-options display-none-mobile">
+					<OverlayTrigger
+						trigger="click"
+						rootClose
+						placement="bottom"
+						overlay={GeneralPopover(localesListProps)}
 					>
-						<MenuDown />
-					</Dropdown.Toggle>
-					<Dropdown.Menu variant={themeMode === 'dark' && 'dark'}>
-						<Dropdown.Item as="button">
-							<DarkModeToggle switchTheme={onThemeSwitch} theme={themeMode} />
-						</Dropdown.Item>
-						<Dropdown.Item as="button">
-							<div className="site-options">
-								<OverlayTrigger
-									trigger="click"
-									rootClose
-									placement="bottom"
-									overlay={GeneralPopover(localesListProps)}
-								>
-									<span
-										className="language-switch option-wrapper"
-										title={currentLocale && currentLocale.native_name}
-									>
-										<span className="option-icon">
-											<Globe2 />
-										</span>
-										<span className="option-title">{localeName.current}</span>
-									</span>
-								</OverlayTrigger>
-							</div>
-						</Dropdown.Item>
-						<Dropdown.Item
-							href="https://commons.wikimedia.org/wiki/Commons:VideoCutTool"
-							target="_blank"
-							padding="1em"
+						<span
+							className="language-switch option-wrapper"
+							title={currentLocale && currentLocale.native_name}
 						>
-							<Message id="guide-to-use" />
-						</Dropdown.Item>
-					</Dropdown.Menu>
-				</Dropdown>
+							<span className="option-icon">
+								{themeMode === "dark" ? <img className='lang-icon' src={languageIcon} alt="" /> : <img className='lang-icon' src={languageIcon2} alt="" />}
+							</span>
+							<span className="option-title">{localeName.current}</span>
+						</span>
+					</OverlayTrigger>
+				</div>
+				<span className='display-none-mobile'>
+					<DarkModeToggle switchTheme={onThemeSwitch} theme={themeMode} />
+				</span>
+				<div className="user-wrapper">
+					<Authentication apiUrl={apiUrl} />
+				</div>
 			</div>
-			<Button
-				variant="outline-secondary"
-				className="documentation-btn"
-				onClick={() =>
-					window.open(
-						'https://commons.wikimedia.org/wiki/Commons:VideoCutTool',
-						'_blank',
-						'noreferrer'
-					)
-				}
-			>
-				<Message id="guide-to-use" />
-			</Button>
 		</div>
 	);
 }

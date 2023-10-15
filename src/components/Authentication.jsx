@@ -20,6 +20,13 @@ function Authentication() {
 	const handleLogOut = () => {
 		onLogOut(updateAppState, setCurrentUser);
 	};
+	const TruncatedUsername = (username) => {
+		if (username) {
+			const truncatedUsername = username.length > 10 ? `${username.slice(0, 10)}...` : username;
+			return truncatedUsername
+		}
+		return '';
+	};
 
 	const popoverProps = {
 		id: 'popover-basic',
@@ -51,15 +58,15 @@ function Authentication() {
 
 			{user && (
 				<div className="functionality-btn">
-					<span style={{ color: 'white' }} data-testid="username">
+					<span data-testid="username">
 						<Message
 							id="welcome"
 							placeholders={[
 								<a
-									className="text-white font-weight-bold"
+									className="font-weight-bold"
 									href={`${base_wiki_url}/wiki/user:${user.username}`}
 								>
-									{user.username}
+									{TruncatedUsername(user.username)}
 								</a>
 							]}
 						/>
@@ -71,7 +78,7 @@ function Authentication() {
 							placement="bottom"
 							overlay={GeneralPopover(popoverProps)}
 						>
-							<Button variant="success" id="logout-button" size="sm">
+							<Button variant="light" id="logout-button" size="sm">
 								<Message id="logout" />
 							</Button>
 						</OverlayTrigger>

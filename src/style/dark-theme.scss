@@ -1,21 +1,67 @@
 @import '_mixins';
-$bg-color-accent0: #032948;
-$bg-color-accent1: #064273;
-$bg-color-accent2: #0c436f;
-$bg-color-accent3: #105288;
-$bg-color-accent4: #54a0de;
+$bg-color-accent0: #202122;
+$bg-color-accent1: #202122;
+$bg-color-accent2: #202122;
+$bg-color-accent3: #202122;
+$bg-color-accent4: #202122;
 $border-color: #0074a2;
-$text-color: #b6e2fa;
+$text-color: #ffffff;
 
 $disabled-color: #656565;
 $disabled-border-color: rgba($disabled-color, 30%);
 $disabled-bg-color: desaturate($bg-color-accent2, 60%);
 
 body[theme='dark'] {
-	color: #b6e2fa;
+	color: #f3f3f3;
 
 	#sidebar {
 		background-color: $bg-color-accent0;
+
+		.option-title {
+			color: $text-color;
+		}
+
+	}
+
+	#url-box {
+		.upload-info-message {
+			color: #fcfcfc;
+		}
+
+		.url-box-container {
+			background-color: #202122;
+		}
+
+		.url-input {
+			background-color: rgb(20, 15, 15);
+		}
+
+		.drop-area {
+			border: 3px dashed #000000;
+			background-color: #1d1c1c;
+		}
+
+
+	}
+
+	#url-box {
+		.upload-info-message {
+			color: #ffffff;
+		}
+
+		.url-box-container {
+			background-color: #202122;
+		}
+
+		.url-input{
+			background-color: rgb(26, 26, 26);
+		}
+
+		.drop-area {
+			border: 3px dashed #000000;
+		}
+
+
 	}
 
 	#content {
@@ -23,9 +69,11 @@ body[theme='dark'] {
 
 		#url-box .drop-area {
 			border-color: $border-color;
-			input ::placeholder{
-				color:#b6e2fa;
+
+			input ::placeholder {
+				color: #b6e2fa;
 			}
+
 			.drop-area-click {
 				background-color: $bg-color-accent3;
 			}
@@ -37,16 +85,23 @@ body[theme='dark'] {
 			a {
 				color: darken($text-color, 10%);
 			}
+
+			.footer-date {
+				color: #ffffff;
+			}
 		}
 	}
 
-	#video-player-container .video-controls-container .play-bar {
-		&::before {
-			background-color: $border-color;
-		}
+	#video-player-container .video-controls-container {
+		background-color: #313030;
+		.play-bar {
+			&::before {
+				background-color: $border-color;
+			}
 
-		.play-bar-handle {
-			background-color: $bg-color-accent4;
+			.play-bar-handle {
+				background-color: rgb(255, 255, 255);
+			}
 		}
 	}
 
@@ -93,6 +148,7 @@ body[theme='dark'] {
 		}
 
 		.popover-body {
+			color: #ffffff;
 			background-color: $bg-color-accent4;
 			@include scrollbars(4px, $text-color, rgba(255, 255, 255, 0.2));
 		}

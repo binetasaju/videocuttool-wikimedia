@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom"
 import { Button, ButtonGroup, ToggleButton, Form, InputGroup } from 'react-bootstrap';
+
 import { Upload, Download, CardHeading, CardText, ChatLeftTextFill } from 'react-bootstrap-icons';
 import { Message, BananaContext } from '@wikimedia/react.i18n';
 import { GlobalContext } from '../context/GlobalContext';
@@ -17,6 +18,8 @@ import { List } from 'react-bootstrap-icons';
 import logo from '../logo.svg';
 import { Image } from 'react-bootstrap';
 import Notification from '../components/Notification';
+import penicon from "../pen.svg";
+import downicon from "../Down.svg"
 
 const API_URL = ENV_SETTINGS().backend_url;
 const fileNameRegex = /^(.*)\.[a-zA-Z0-9]+$/;
@@ -31,6 +34,35 @@ function Results() {
 	const [videoState, setVideoState] = useState([]);
 	const [showProgress, setShowProgress] = useState(false);
 	const [wantTitle, setWantTitle] = useState('');
+	const [isDisabled, setIsDisabled] = useState(true);
+	const [isDisabled1, setIsDisabled1] = useState(true);
+	const [isDisabled2, setIsDisabled2] = useState(true);
+
+
+	const enableTextarea = () => {
+		if (isDisabled) {
+			setIsDisabled(false);
+		}
+		else {
+			setIsDisabled(true);
+		}
+	};
+	const enableTextarea1 = () => {
+		if (isDisabled1) {
+			setIsDisabled1(false);
+		}
+		else {
+			setIsDisabled1(true);
+		}
+	};
+	const enableTextarea2 = () => {
+		if (isDisabled2) {
+			setIsDisabled2(false);
+		}
+		else {
+			setIsDisabled2(true);
+		}
+	};
 
 	const { backend_url: backendUrl } = ENV_SETTINGS();
 
@@ -135,7 +167,7 @@ function Results() {
 
 	return (
 		<div id="main-container">
-			<Header apiUrl={backendUrl} />
+			<Header apiUrl={backendUrl}/>
 			<div id="content" className="flex-column">
 				<div className="logo-wrapper flex-sm-row">
 					<span className="menu-icon" data-testid="sidebar-toggle-button" onClick={toggleHeader}>
@@ -150,99 +182,105 @@ function Results() {
 					<div className="videos-container">
 						{videoState.map((video, index) => (
 							<div className="video-results-wrapper" key={`wrapper-${index}`}>
-								<div className="video-results-header">
-									{video.title.length > 0 && <h5 title={video.title}>{video.title}</h5>}
-									{video.title.length === 0 && <h5>(No Title)</h5>}
-								</div>
-								<p> Time taken: {formatTime(processTime / 1000)} seconds</p>
 								<div className={`row ${video.displayUploadToCommons === false && 'd-none'}`}>
-									<div className="video-player-wrapper col-md-7">
-										<VideoPlayer videoUrl={`${API_URL}/${video.path}`} />
-									</div>
-									<div className="video-options col-md-5">
-										<div className="form-group">
-											<ButtonGroup className="mb-2">
-												<ToggleButton
-													variant="secondary"
-													onClick={() => updateUploadType(index, 'overwrite')}
-													type="radio"
-													name="upload-type"
-													checked={video.selectedOptionName === 'overwrite'}
-												>
-													<span className="button-title">
-														<Message id="upload-action-overwrite" />
-													</span>
-												</ToggleButton>
-												<ToggleButton
-													variant="secondary"
-													onClick={() => updateUploadType(index, 'new-file')}
-													type="radio"
-													name="upload-type"
-													checked={video.selectedOptionName === 'new-file'}
-												>
-													<span className="button-title">
-														<Message id="upload-action-new-file" />
-													</span>
-												</ToggleButton>
-											</ButtonGroup>
+									<div className='alignment'>
+										<div className="video-player-wrapper">
+											<VideoPlayer videoUrl={`${API_URL}/${video.path}`} />
 										</div>
-										{video.selectedOptionName === 'new-file' && (
-											<InputGroup className="mb-3" title={banana.i18n('upload-action-new-file-title')}>
-												<InputGroup.Text>
-													<CardHeading size="18" />
-												</InputGroup.Text>
-
-												<Form.Control
-													type="text"
-													defaultValue={video.title}
-													onChange={e => updateTitle(index, e.target.value)}
-												/>
+										<div className="video-options col-md-5">
+											{video.selectedOptionName === 'new-file' && (
+												<InputGroup className="mb-3 input-group-style" title={banana.i18n('upload-action-new-file-title')}>
+													<div className='input-dropdown'>
+														<Form.Label className="input-lable-style" htmlFor="videoTitle">Video Title</Form.Label>
+														{/* <Button className='down-button' onClick={hideinput1}>
+															<img className='downicon' src={downicon} alt="" />
+														</Button> */}
+													</div>
+													<div className='d-flex'>
+														<Form.Control
+															className={`input-input-style ${isDisabled1 ? 'disabled-input' : ''}`}
+															type="text"
+															defaultValue={video.title}
+															onChange={e => updateTitle(index, e.target.value)}
+															disabled={isDisabled1}
+														/> <Button className={`pen-button`} onClick={enableTextarea1}>
+															<img src={penicon} alt="" />
+														</Button></div>
+												</InputGroup>
+											)}
+											<InputGroup className="mb-3 input-group-style" title={banana.i18n('upload-comment')}>
+												<div className='input-dropdown'>
+													<Form.Label className="input-lable-style" htmlFor="videocomment">Video Comment</Form.Label>
+													{/* <Button className='down-button' onClick={hideinput2}>
+														<img className='downicon' src={downicon} alt="" />
+													</Button> */}
+												</div>
+												<div className='d-flex'>
+													<Form.Control disabled={isDisabled} type="text" className={`input-input-style ${isDisabled ? 'disabled-input' : ''}`} defaultValue={video.comment} onChange={e => updateComment(index, e.target.value)} />
+													<Button className={`pen-button`} onClick={enableTextarea} >
+														<img src={penicon} alt="" />
+													</Button></div>
 											</InputGroup>
-										)}
-										<InputGroup className="mb-3" title={banana.i18n('upload-comment')}>
-											<InputGroup.Text>
-												<ChatLeftTextFill size="18" />
-											</InputGroup.Text>
+											<div className="form-group" >
+												<label className="input-lable-style">Upload option</label>
+												<Form className="mb-2">
+													<Form.Check
+														label={<Message id="upload-action-overwrite" />}
+														variant="secondary"
+														onClick={() => updateUploadType(index, 'overwrite')}
+														type="radio"
+														name="upload-type"
+														checked={video.selectedOptionName === 'overwrite'}
+													>
+													</Form.Check>
+													<Form.Check
 
-											<Form.Control
-												type="text"
-												defaultValue={video.comment}
-												onChange={e => updateComment(index, e.target.value)}
-											/>
-										</InputGroup>
+														label={<Message id="upload-action-new-file" />}
+														variant="secondary"
+														onClick={() => updateUploadType(index, 'new-file')}
+														type="radio"
+														name="upload-type"
+														checked={video.selectedOptionName === 'new-file'}
+													>
 
-										<InputGroup className="mb-3" title={banana.i18n('upload-text')}>
-											<InputGroup.Text>
-												<CardText size="18" />
-											</InputGroup.Text>
+													</Form.Check>
+												</Form>
+											</div>
 
-											<Form.Control
-												as="textarea"
-												rows={15}
-												defaultValue={video.text}
-												onChange={e => updateWikiText(index, e.target.value)}
-											/>
-										</InputGroup>
-										<div className="upload-button d-flex justify-content-between">
-											<Button onClick={uploadVideo}>
-												<Upload />
-												<span className="button-title ms-3">
-													<Message id="upload-button" />
-												</span>
-											</Button>
-											<Button
-												onClick={() => {
-													window.location.href = `${API_URL}/download/${video.path.replace(
-														'/public',
-														''
-													)}`;
-												}}
-											>
-												<Download />
-												<span className="button-title ms-3">
-													<Message id="step-result-choice-download" />
-												</span>
-											</Button>
+											<InputGroup className="mb-3 input-group-style" title={banana.i18n('upload-text')}>
+												<div className='input-dropdown'>
+													<Form.Label htmlFor="summary" className="input-lable-style">Video Summary</Form.Label>
+													{/* <Button className='down-button' onClick={hideinput3}>
+														<img className='downicon' src={downicon} alt="" />
+													</Button> */}
+												</div>
+												<div className='d-flex'>
+													<Form.Control disabled={isDisabled2} className={`input-input-style ${isDisabled2 ? 'disabled-input' : ''}`} as="textarea" rows={15} defaultValue={video.text} onChange={e => updateWikiText(index, e.target.value)}/>
+													<Button className={`pen-button`} onClick={enableTextarea2}>
+														<img src={penicon} alt="" />
+													</Button></div>
+											</InputGroup>
+											<div className="upload-button">
+												<Button onClick={uploadVideo}>
+													<Upload />
+													<span className="button-title ms-3">
+														<Message id="upload-button" />
+													</span>
+												</Button>
+												<Button
+													onClick={() => {
+														window.location.href = `${API_URL}/download/${video.path.replace(
+															'/public',
+															''
+														)}`;
+													}}
+												>
+													<Download />
+													<span className="button-title ms-3">
+														<Message id="step-result-choice-download" />
+													</span>
+												</Button>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -257,7 +295,9 @@ function Results() {
 						</div>
 					</div>
 				</div>
+				<Footer />
 			</div>
+
 			{notifications && notifications.length > 0 && <Notification />}
 		</div>
 	);

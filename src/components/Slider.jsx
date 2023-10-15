@@ -1,7 +1,6 @@
 function Slider(props) {
 	return (
-		<div className="slider">
-			<label htmlFor="slider">{props.title}</label>
+				<div className="slider">
 			<div className="slider-inner">
 				<input
 					type="range"
@@ -11,9 +10,11 @@ function Slider(props) {
 					onChange={props.onChange}
 					value={props.value}
 				/>
+			</div>
+			<div className="volume-value">
 				<span>{props.value}%</span>
 			</div>
 		</div>
-	);
+			);
 }
 export default Slider;

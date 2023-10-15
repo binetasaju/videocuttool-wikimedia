@@ -2,17 +2,20 @@ import { useState, useRef, useContext, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Message } from '@wikimedia/react.i18n';
 import { Form, FormLabel } from 'react-bootstrap';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
 import { GlobalContext } from '../context/GlobalContext';
 import { UserContext } from '../context/UserContext';
 import { VideoDetailsContext } from '../context/VideoDetailsContext';
-import { checkFileExist, fetchVideoId, fetchViaUrl } from '../utils/video';
 import ENV_SETTINGS from '../env';
 const API_URL = ENV_SETTINGS().backend_url;
+import { checkFileExist, fetchViaUrl, fetchVideoId } from '../utils/video';
+import closebutton from "./../close.svg"
 
 function UrlBox(props) {
 	const navigate = useNavigate();
 	const { updateAppState } = useContext(GlobalContext);
-	const { setVideoDetails, setVideoUrl, setFile, setVideoId, setCurrentSubStep } = useContext(VideoDetailsContext);
+	const { setVideoDetails, setVideoUrl, setFile, setVideoId, setCurrentSubStep, setCurrentStep } = useContext(VideoDetailsContext);
 	const { currentUser } = useContext(UserContext);
 	const { title: requiredTitle } = props;
 	const allowedExtensions = 'mp4,webm,mov,flv,ogv';
@@ -32,7 +35,7 @@ function UrlBox(props) {
 	};
 
 	useEffect(() => {
-		fetchViaUrl(updateAppState, setVideoDetails, setVideoUrl, setVideoId, navigate, currentUser,setCurrentSubStep);
+		fetchViaUrl(updateAppState, setVideoDetails, setVideoUrl, setVideoId, navigate, currentUser, setCurrentSubStep);
 	}, []);
 
 
@@ -71,7 +74,7 @@ function UrlBox(props) {
 
 	useEffect(() => {
 		setTitle(requiredTitle);
-		checkFileExist(requiredTitle, updateAppState, setVideoDetails, setVideoUrl);
+		checkFileExist(requiredTitle, updateAppState, setVideoDetails, setVideoUrl, setCurrentStep);
 	}, [requiredTitle]);
 
 	const onUrlInput = async (e) => {
@@ -89,18 +92,11 @@ function UrlBox(props) {
 
 	return (
 		<div id="url-box" data-step-count="1">
-			<div
-				className="drop-area"
-				data-mouseover={mouseHover ? 'true' : 'false'}
-				onDragEnter={dragEnter}
-				onDragLeave={dragLeave}
-				onDragOver={dragOver}
-				onDrop={dropped}
-			>
-				<div className="upload-info-message  mb-3 mb-md-5">
+			<div className='url-box-container'>
+				<div className="upload-info-message">
 					<Message id="upload-upload-text" />
 				</div>
-				<FormLabel className="drop-area-click m-0" htmlFor="upload-file-input" ref={fileUpload} />
+
 				<input
 					className="d-none"
 					ref={fileUpload}
@@ -110,16 +106,39 @@ function UrlBox(props) {
 					onChange={onFileUpload}
 					autoComplete="on"
 				/>
-				<Form.Control
-					type="text"
-					className="upload-url-input w-50"
-					placeholder="https://commons.wikimedia.org/wiki/File:video.webm"
-					onChange={onUrlInput}
-					autoComplete="true"
-					value={title}
-				/>
+
+
+				<div
+					className="drop-area"
+					data-mouseover={mouseHover ? 'true' : 'false'}
+					onDragEnter={dragEnter}
+					onDragLeave={dragLeave}
+					onDragOver={dragOver}
+					onDrop={dropped}
+				>
+					<InputGroup className="upload-url-input">
+						<Form.Control
+							className='url-input'
+							type="text"
+							placeholder="https://commons.wikimedia.org/wiki/File:video.webm"
+							onChange={onUrlInput}
+							autoComplete="true"
+							value={title}
+						/>
+						{/* <Button className='inputbox-url'><img src={closebutton} alt="closebutton" /></Button> */}
+					</InputGroup>
+					<div className='or-container'>
+						<div className='left-line'></div>
+						<div className='or-text'>Or</div>
+						<div className='right-line'></div>
+					</div>
+					<FormLabel className="drop-area-click" htmlFor="upload-file-input" ref={fileUpload} >Choose video</FormLabel>
+					{/* <p>Drop files here</p> */}
+
+				</div>
 			</div>
 		</div>
+
 	);
 }
 export default UrlBox;

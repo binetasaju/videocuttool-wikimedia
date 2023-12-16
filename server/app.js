@@ -50,7 +50,7 @@ app.use(
 
 // Static files
 app.use('/public', express.static(path.join(__dirname, 'public')));
-
+app.use('/videos', express.static(path.join(__dirname, 'videos')));
 // View engine setup
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));

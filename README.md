@@ -173,6 +173,12 @@ via `apt` or some other package manager you prefer.
 
 If you face any issues regarding setting up beta instance, feel free to raise your queries on [phabricator](https://phabricator.wikimedia.org/tag/videocuttool/), or contact us via Zulip.
 
+### Apply patches at the server
+
+- Switch to root user `sudo -i`
+- cd `/app/VideoCutTool`
+- Sync to the master using `./server-sync.sh`
+
 ## Credits
 
 VideoCutTool is created by Gopa Vasanth as a part of 2019 Google Summer of Code in the mentorship of Pratik Shetty, Hassan Amin and James Heilman.

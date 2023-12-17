@@ -88,6 +88,9 @@ async function workerProcess(job) {
 				newVideoPath = concatStage.concatenatedLocation;
 			}
 		}
+		if ( modified.trim === false && modified.crop === false && modified.mute === false && modified.rotate === false && modified.volume === false ) {
+			newVideoPath = videoDownloadPath;
+		}
 		// Convert video and return the converted video path
 		const convertingVideoInfo = {
 			videoPaths: newVideoPath,

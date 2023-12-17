@@ -14,7 +14,7 @@ import closebutton from "./../close.svg"
 
 function UrlBox(props) {
 	const navigate = useNavigate();
-	const { updateAppState } = useContext(GlobalContext);
+	const { updateAppState, setUploadedVideo } = useContext(GlobalContext);
 	const { setVideoDetails, setVideoUrl, setFile, setVideoId, setCurrentSubStep, setCurrentStep } = useContext(VideoDetailsContext);
 	const { currentUser } = useContext(UserContext);
 	const { title: requiredTitle } = props;
@@ -61,7 +61,7 @@ function UrlBox(props) {
 		await fetchVideoId(
 			files[0].name.replace(/\s/g, '_')
 			, fileurl, files[0], setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState);
-
+			setUploadedVideo(1);
 	};
 
 	const dropped = e => {

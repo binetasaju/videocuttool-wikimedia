@@ -40,7 +40,7 @@ import Notification from '../components/Notification';
  * @returns {string} Output
  */
 function VideoSettings() {
-	const { updateAppState, appState } = useContext(GlobalContext);
+	const { updateAppState, appState, uploadedVideo } = useContext(GlobalContext);
 	const { socketId, notifications, themeMode } = appState;
 	const { currentUser } = useContext(UserContext);
 	const {
@@ -115,6 +115,27 @@ function VideoSettings() {
 	const [canPreview, setCanPreview] = useState(false);
 	const [currentSetting, setCurrentSetting] = useState(false);
 	const [currentVolume, setCurrentVolume] = useState(100);
+
+	useEffect(() => {
+		if (uploadedVideo) {
+			setCanPreview(true);
+		}
+	}, []);
+
+	const UploadDirect = async () => {
+		setCurrentSubStep('process');
+		const userinfo = {
+			mediawikiId: currentUser.mediawikiId,
+			username: currentUser.username,
+			socketId: socketId
+		};
+		const formData = new FormData();
+		formData.append('data', JSON.stringify(settingData));
+		formData.append('videoId', videoId);
+		formData.append('user', JSON.stringify(userinfo));
+		formData.append('file', file);
+		await processVideo(formData, updateAppState, setCurrentSubStep);
+	};
 
 	/**
 	 * Update settings by first cloning the current settings
@@ -452,6 +473,19 @@ function VideoSettings() {
 							<Message id="preview-text" />
 						</span>
 					</Button>
+					{uploadedVideo ? (
+						<Button
+							variant="primary"
+							className="me-5"
+							disabled={canPreview === true}
+							onClick={UploadDirect}
+						>
+
+							<span className="setting-title">Upload Directlty</span>
+						</Button>
+					) : (
+						''
+					)}
 
 					<Button
 						variant="danger"

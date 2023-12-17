@@ -135,7 +135,7 @@ app.get('/logout', (req, res) => {
 
 app.post('/process', processVideo);
 app.post('/upload', uploadVideos);
-app.get('/download/:videopath', downloadVideo);
+app.post('/download', downloadVideo);
 app.post("/register", registerVideo );
 
 // catch 404 and forward to error handler

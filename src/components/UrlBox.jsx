@@ -15,7 +15,7 @@ function UrlBox(props) {
 	const { setVideoDetails, setVideoUrl, setFile, setVideoId, setCurrentSubStep, setCurrentStep } = useContext(VideoDetailsContext);
 	const { currentUser } = useContext(UserContext);
 	const { title: requiredTitle } = props;
-	const allowedExtensions = 'mp4,webm,mov,flv,ogv';
+	const allowedExtensions = 'mp4,webm,mov,flv,ogv,mpg,mpeg';
 	const [mouseHover, setMouseHover] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [title, setTitle] = useState('');

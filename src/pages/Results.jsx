@@ -18,6 +18,7 @@ import { List } from 'react-bootstrap-icons';
 import logo from '../logo.svg';
 import { Image } from 'react-bootstrap';
 import Notification from '../components/Notification';
+import closeIcon from "../close.svg"
 import penicon from "../pen.svg";
 import downicon from "../Down.svg"
 
@@ -204,7 +205,7 @@ function Results() {
 															onChange={e => updateTitle(index, e.target.value)}
 															disabled={isDisabled1}
 														/> <Button className={`pen-button`} onClick={enableTextarea1}>
-															<img src={penicon} alt="" />
+															<img src={isDisabled1 ? penicon : closeIcon} alt="" />
 														</Button></div>
 												</InputGroup>
 											)}
@@ -218,7 +219,7 @@ function Results() {
 												<div className='d-flex'>
 													<Form.Control disabled={isDisabled} type="text" className={`input-input-style ${isDisabled ? 'disabled-input' : ''}`} defaultValue={video.comment} onChange={e => updateComment(index, e.target.value)} />
 													<Button className={`pen-button`} onClick={enableTextarea} >
-														<img src={penicon} alt="" />
+														<img src={isDisabled1 ? penicon : closeIcon} alt="" />
 													</Button></div>
 											</InputGroup>
 											<div className="form-group" >
@@ -257,7 +258,7 @@ function Results() {
 												<div className='d-flex'>
 													<Form.Control disabled={isDisabled2} className={`input-input-style ${isDisabled2 ? 'disabled-input' : ''}`} as="textarea" rows={15} defaultValue={video.text} onChange={e => updateWikiText(index, e.target.value)}/>
 													<Button className={`pen-button`} onClick={enableTextarea2}>
-														<img src={penicon} alt="" />
+														<img src={isDisabled1 ? penicon : closeIcon} alt="" />
 													</Button></div>
 											</InputGroup>
 											<div className="upload-button">

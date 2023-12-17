@@ -11,6 +11,7 @@
 	"file-not-existing": "File Does Not Exist",
 	"footer-authors": "$1 and $2",
 	"guide-to-use":"Guide to use",
+	"internet-connection-lost": "Server unavailable or you are offline",
 	"languages": "Languages",
 	"login": "Login",
 	"login-alert": "Please log in to use the tool",

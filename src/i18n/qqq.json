@@ -22,6 +22,7 @@
 	"file-not-existing": "Error notification text shown if file is not existing",
 	"footer-authors": "Authors displayed on Footer.\n* $1 and $2 - Author names",
 	"guide-to-use": "Guide to use",
+	"internet-connection-lost": "Server unavailable or you are offline",
 	"languages": "Title of the dropdown to select a language\n{{Identical|Language}}",
 	"login": "Text of button to login or register an account",
 	"login-alert": "Text shown when trying to edit a video but not logged in",

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Toast } from 'react-bootstrap';
 import {
 	InfoCircleFill,
@@ -25,6 +25,20 @@ function Notification() {
 	const onToastClose = index => {
 		updateNotification({ show: false }, index);
 	};
+
+	useEffect(() => {
+		// Automatically close notifications after 5 seconds
+		const notificationTimeout = setTimeout(() => {
+		  notifications.forEach((notification, index) => {
+			if (notification.show) {
+			  onToastClose(index);
+			}
+		  });
+		}, 5000);
+	
+		// Clear the timeout when the component is unmounted or when notifications change
+		return () => clearTimeout(notificationTimeout);
+	  }, [notifications]);
 
 	return (
 		<div id="notification-wrapper">

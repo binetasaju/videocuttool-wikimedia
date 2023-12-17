@@ -72,6 +72,37 @@ function Home() {
 		}
 	}, []);
 
+	const [isOnline, setIsOnline] = useState(true);
+	const [tabActive, setTabActive] = useState(true);
+
+	useEffect(() => {
+		socket.on('connect', () => {
+			setIsOnline(true);
+		});
+
+		socket.on('connect_error', () => {
+			setIsOnline(false);
+		});
+		const handleVisibilityChange = () => {
+			setTabActive(!document.hidden);
+		};
+
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+		if (!isOnline) {
+			updateAppState({
+				notification: {
+					type: 'error',
+					messageId: 'internet-connection-lost'
+				}
+			});
+		}
+		// Specify how to clean up after this effect for performance improvment
+		return () => {
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
+	}, [isOnline, tabActive]);
+
 	const toggleHeader = () => {
 		const status = !showHeader;
 		document.body.setAttribute('data-sidebar', status ? 'show' : 'hide');

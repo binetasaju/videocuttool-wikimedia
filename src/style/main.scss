@@ -361,7 +361,7 @@ body {
 		z-index: 0;
 		cursor: pointer;
 		background-color: #F8F9FA;
-		color: #3366CC;
+		color: #739ef4;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -403,7 +403,7 @@ body {
 	.upload-url-input .url-input:focus {
 		border-color: #3366CC;
 		/* Change the border color when input is focused */
-		box-shadow: 0 0 0 0.2rem rgba(51, 102, 204, 0.25);
+		box-shadow: 0 0 0 0.2rem rgba(51, 102, 204, 0.25);	
 		/* Optional: Add a box-shadow when input is focused */
 		/* You can also change the text color if needed */
 		/* color: #3366CC; */

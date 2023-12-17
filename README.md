@@ -179,10 +179,16 @@ If you face any issues regarding setting up beta instance, feel free to raise yo
 - cd `/app/VideoCutTool`
 - Sync to the master using `./server-sync.sh`
 
-## Credits
+### Acknowledgments
 
-VideoCutTool is created by Gopa Vasanth as a part of 2019 Google Summer of Code in the mentorship of Pratik Shetty, Hassan Amin and James Heilman.
+VideoCutTool owes its existence to the dedication and collaborative efforts of several individuals who have played crucial roles in its development and maintenance:
 
-Khr2003 joined as a co-maintainer of the tool and revamped the code base.
+Gopa Vasanth (@Gopavasanth on phabricator.wikimedia.org): The original creator of VideoCutTool, Gopa Vasanth initiated the project during the 2019 Google Summer of Code under the mentorship of Pratik Shetty, Hassan Amin, and James Heilman.
 
-Sohom Datta (@soda on phabricator.wikimedia.org) joined as a co-maintainer of the tool for Google Summer of Code 2023 as a mentor to the project.
+Khr2003: A co-maintainer of the tool, Khr2003 significantly contributed to the project by revamping the code base during their tenure.
+
+Sohom Datta (@soda on phabricator.wikimedia.org): Joining as a co-maintainer during the Google Summer of Code 2023, Sohom Datta served as a mentor to the project, further advancing the tool's development.
+
+Punith and Varun: These contributors made valuable contributions to VideoCutTool as part of the Google Summer of Code 2023. Their dedication and input led them to become co-maintainers of the tool.
+
+The collaborative efforts of these individuals have shaped VideoCutTool into a powerful and efficient tool for its users.

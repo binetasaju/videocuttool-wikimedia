@@ -17,6 +17,7 @@
 	"error-file-not-exist": "Error message when file does not exist on Commons",
 	"error-worker": "Error message when the worker fails",
 	"enabled-features": "Shows the enabled features from the video settings pallete",
+	"documentation": "Displays documentation label on the footer as a text",
 	"file-not-existing": "Error notification text shown if file is not existing",
 	"footer-authors": "Authors displayed on Footer.\n* $1 and $2 - Author names",
 	"guide-to-use": "Guide to use",

@@ -6,6 +6,7 @@
 	"error-file-not-exist":"File doesn't exist on Wikimedia Commons",
 	"error-worker":"An error occurred while processing the video (worker).",
 	"enabled-features":"Enabled $1",
+	"documentation": "Documentation",
 	"file-not-existing": "File Does Not Exist",
 	"footer-authors": "$1 and $2",
 	"guide-to-use":"Guide to use",

@@ -19,6 +19,7 @@ const GlobalContextProvider = function GlobalContextProvider(props) {
 		notifications: []
 	};
 	const [appState, setAppState] = useState(initialAppState);
+	const [uploadedVideo, setUploadedVideo] = useState(0);
 
 	const updateAppState = newState => {
 		let { notifications } = appState;
@@ -55,9 +56,12 @@ const GlobalContextProvider = function GlobalContextProvider(props) {
 		() => ({
 			appState,
 			updateAppState,
-			updateNotification
+			updateNotification,
+			uploadedVideo,
+			setUploadedVideo
+
 		}),
-		[appState, updateAppState, updateNotification]
+		[appState, updateAppState, updateNotification, uploadedVideo, setUploadedVideo]
 	);
 
 	return (

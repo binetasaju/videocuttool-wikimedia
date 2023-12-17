@@ -272,10 +272,8 @@ const processVideo = async (req, res) => {
 };
 
 const downloadVideo = (req, res) => {
-	const file = `public/${req.params.videopath}`;
-
-	// Set disposition and send it.
-	res.download(file);
+	const file = `public/${req.body.videoPath}`;
+	res.download(file,req.body.videoTitle);
 };
 
 async function processAndSaveVideo(req, res, videoid, videoName, user, url, videoDownloadPath) {

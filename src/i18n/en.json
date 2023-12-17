@@ -1,4 +1,5 @@
 {
+	"copyrighted-video-upload-restriction":"Copyrighted video upload restriction",
 	"404-go-back": "Go to Main page",
 	"404-image-description": "404 Page not found",
 	"downloading-to-server":"Fetching the video",
@@ -93,6 +94,8 @@
 	"upload-tab-video-url": "Video URL",
 	"upload-text": "Text",
 	"upload-upload-text": "Click or drag video to this area to upload",
+	"upload-wizard":"Upload Wizard",
+	"upload-wizard-redirect":"Upload videos using Upload Wizard if you don't own the copyright",
 	"video-trim-from": "From",
 	"video-trim-more": "Add More",
 	"video-trim-more-concatenate": "Concatenate into single video",

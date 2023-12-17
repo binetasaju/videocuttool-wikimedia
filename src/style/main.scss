@@ -252,10 +252,10 @@ body {
 		&:hover:not(.active) {
 			background-color: rgba(180, 180, 180, 0.3);
 		}
-	
+
 	}
 }
-	
+
 
 
 #content {
@@ -276,7 +276,7 @@ body {
 		flex-direction: column;
 		overflow: auto;
 		height: 100%;
-		
+
 
 		@include scrollbars(4px, rgba(16, 82, 136, 0.8), rgba(16, 82, 136, 0.25));
 
@@ -581,6 +581,10 @@ body {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.copywright-container {
+		margin-bottom: 1rem;
 	}
 }
 

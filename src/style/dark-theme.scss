@@ -55,6 +55,10 @@ body[theme='dark'] {
 
 		.url-input {
 			background-color: rgb(26, 26, 26);
+
+			&::placeholder {
+				color: #666666; /* Change this to your desired placeholder color */
+			}
 		}
 
 		.drop-area {

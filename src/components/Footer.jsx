@@ -27,7 +27,7 @@ function Footer() {
                 <a className='footer-style'
                     target="_blank"
                     rel="noreferrer"
-                    href="https://gerrit.wikimedia.org/r/admin/repos/labs/tools/VideoCutTool"
+                    href="https://gitlab.wikimedia.org/cloudvps-repos/videocuttool/VideoCutTool"
                 >
                     <span>
                         <Message id="repository" />

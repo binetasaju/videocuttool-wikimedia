@@ -18,6 +18,7 @@ import { List } from 'react-bootstrap-icons';
 import logo from '../logo.svg';
 import { Image } from 'react-bootstrap';
 import Notification from '../components/Notification';
+import closeIcon from "../close.svg"
 import penicon from "../pen.svg";
 import downicon from "../Down.svg"
 const { uploadwizard_link } = ENV_SETTINGS();
@@ -233,7 +234,7 @@ function Results() {
 															onChange={e => updateTitle(index, e.target.value)}
 															disabled={isDisabled1}
 														/> <Button className={`pen-button`} onClick={enableTextarea1}>
-															<img src={penicon} alt="" />
+															<img src={isDisabled1 ? penicon : closeIcon} alt="" />
 														</Button></div>
 												</InputGroup>
 											)}

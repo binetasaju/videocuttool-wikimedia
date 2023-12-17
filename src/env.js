@@ -8,6 +8,7 @@ const ENV_SETTINGS = () => {
 		base_wiki_url: 'https://commons.wikimedia.org',
 		phab_link:
 			'https://phabricator.wikimedia.org/maniphest/task/edit/form/43/?projects=VideoCutTool',
+		docs_link: "https://commons.wikimedia.org/wiki/Commons:VideoCutTool",
 		file_url:'https://commons.wikimedia.org/wiki/File:',
 		uploadwizard_link:'https://commons.wikimedia.org/wiki/Special:UploadWizard'
 	};

@@ -75,7 +75,7 @@ const checkFileExist = async (
 	filePath,
 	updateAppState,
 	setVideoDetails,
-	setVideoUrl
+	setVideoUrl, setLoading
 ) => {
 	// First check if pattern File:(filename) exists
 	const matchPath = filePath.match(/File:(.*)$/);
@@ -109,6 +109,7 @@ const checkFileExist = async (
 		return result;
 
 	} catch (err) {
+		setLoading(false);
 		updateAppState({
 			notification: {
 				type: 'error',
@@ -257,7 +258,7 @@ function toTitleCase(type) {
 	return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
-const fetchVideoId = async (title, url, file, setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState) => {
+const fetchVideoId = async (title, url, file, setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState, setVideoUrl) => {
 	const formData = new FormData();
 	formData.append('title', JSON.stringify(title));
 	formData.append('url', JSON.stringify(url));
@@ -273,7 +274,8 @@ const fetchVideoId = async (title, url, file, setVideoId, navigate, currentUser,
 		if (!response.ok) {
 			throw data;
 		}
-
+		const apiPath = data.path.replace("/app/server", "/api");
+		setVideoUrl(apiPath)
 		setVideoId(data.id);
 		navigate(`/edit/${data.id}`)
 	} catch (err) {
@@ -292,7 +294,7 @@ const fetchVideoId = async (title, url, file, setVideoId, navigate, currentUser,
 	}
 };
 
-const fetchViaUrl = async (updateAppState, setVideoDetails, setVideoUrl, setVideoId, navigate, currentUser,setCurrentSubStep) => {
+const fetchViaUrl = async (updateAppState, setVideoDetails, setVideoUrl, setVideoId, navigate, currentUser, setCurrentSubStep, setLoading) => {
 	const currentUrl = window.location.href;
 	if (!currentUrl.includes('title')) {
 		return;
@@ -300,9 +302,9 @@ const fetchViaUrl = async (updateAppState, setVideoDetails, setVideoUrl, setVide
 	const decodedTitle = decodeURIComponent(currentUrl.split('?title=')[1]);
 	const originalUrl = `${file_url}${decodedTitle}`;
 	try {
-		const result = await checkFileExist(originalUrl, updateAppState, setVideoDetails, setVideoUrl);
+		const result = await checkFileExist(originalUrl, updateAppState, setVideoDetails, setVideoUrl, setLoading);
 		if (result) {
-			fetchVideoId(result.title, result.url, null, setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState);
+			fetchVideoId(result.title, result.url, null, setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState, setVideoUrl);
 		}
 	}
 	catch (e) {

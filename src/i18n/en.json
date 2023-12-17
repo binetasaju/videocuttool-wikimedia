@@ -1,6 +1,7 @@
 {
 	"404-go-back": "Go to Main page",
 	"404-image-description": "404 Page not found",
+	"downloading-to-server":"Fetching the video",
 	"error-process":"An error occurred during the process",
 	"error-retrieve-data":"Something went wrong while retrieving video's data",
 	"error-file-not-exist":"File doesn't exist on Wikimedia Commons",

@@ -28,11 +28,11 @@ function convertTimeToMs(time) {
  */
 function deleteFiles(files) {
 	if (!Array.isArray(files)) {
-		fs.unlink(files, () => {});
+		fs.unlink(files, () => { });
 		return;
 	}
 	files.forEach(file => {
-		fs.unlink(file, () => {});
+		fs.unlink(file, () => { });
 	});
 }
 
@@ -435,21 +435,23 @@ async function moveVideosToPublic(videoPaths) {
  * @param {string} videoDownloadPath Details of the downloaded video path
  * @returns {string} String with video path on success, or error property on failure
  */
-async function download(url, videoDownloadPath) {
-	const command = `ffmpeg -y -i "${url}" -vcodec copy -acodec copy '${videoDownloadPath}'`;
+async function download(url, videoDownloadPath, cb) {
+	return new Promise((resolve, reject) => {
+		const command = `ffmpeg -y -i "${url}" -vcodec copy -acodec copy '${videoDownloadPath}'`;
 
-	exec(command, (error, stdout, stderr) => {
-		if (error) {
-			console.error(`Error: ${error}`);
-			return;
-		}
-
-		console.log(`Standard Output:\n${stdout}`);
-		console.error(`Standard Error:\n${stderr}`);
+		exec(command, (error, stdout, stderr) => {
+			if (error) {
+				console.error(`Error: ${error}`);
+				reject(error);
+			} else {
+				console.log(`Standard Output:\n${stdout}`);
+				console.error(`Standard Error:\n${stderr}`);
+				resolve(videoDownloadPath);
+				cb()
+			}
+		});
 	});
-	return videoDownloadPath;
 }
-
 module.exports = {
 	convertTimeToMs,
 	deleteFiles,

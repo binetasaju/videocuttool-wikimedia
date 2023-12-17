@@ -278,6 +278,36 @@ const downloadVideo = (req, res) => {
 	res.download(file);
 };
 
+async function processAndSaveVideo(req, res, videoid, videoName, user, url, videoDownloadPath) {
+	await User.upsert(user);
+	const userDoc = await User.findOne({ mediawikiId: user.mediawikiId });
+	const videoData = {
+		id: videoid,
+		url: url,
+		videoDownloadPath,
+		uploadedBy: userDoc.mediawikiId,
+		status: 'downloading',
+		videoName,
+		UserMediawikiId: user.mediawikiId
+	};
+	const SettingsData = {
+		rotateValue: 0,
+		trimMode: 'single',
+		trims: [],
+		modified: {},
+		crop: {},
+		volume: 0,
+		VideoId: videoData.id
+	};
+	const videoDbObj = await Video.create(videoData);
+	await videoDbObj.save();
+
+	const videoSettingsDbObj = await Settings.create(SettingsData);
+	await videoSettingsDbObj.save();
+
+	res.send({ id: videoid, path: videoDownloadPath });
+}
+
 const registerVideo = async (req, res) => {
 	const videoid = randomUUID();
 	const videoName = JSON.parse(req.body.title);
@@ -300,39 +330,15 @@ const registerVideo = async (req, res) => {
 			throw e;
 		}
 		if (url.includes('wikimedia')) {
-			await utils.download(url, videoDownloadPath);
+			await utils.download(url, videoDownloadPath, async () => {
+				await processAndSaveVideo(req, res, videoid, videoName, user, url, videoDownloadPath);
+			});
 		} else {
 			await new Promise((resolve, reject) => {
 				uploadedFile.mv(videoDownloadPath, err => (err ? reject(err) : resolve()));
 			});
+			await processAndSaveVideo(req, res, videoid, videoName, user, url, videoDownloadPath);
 		}
-		await User.upsert(user);
-		const userDoc = await User.findOne({ mediawikiId: user.mediawikiId });
-		const videoData = {
-			id: videoid,
-			url: url,
-			videoDownloadPath,
-			uploadedBy: userDoc.mediawikiId,
-			status: 'downloading',
-			videoName,
-			UserMediawikiId: user.mediawikiId
-		};
-		const SettingsData = {
-			rotateValue: 0,
-			trimMode: 'single',
-			trims: [],
-			modified: {},
-			crop: {},
-			volume: 0,
-			VideoId: videoData.id
-		};
-		const videoDbObj = await Video.create(videoData);
-		await videoDbObj.save();
-
-		const videoSettingsDbObj = await Settings.create(SettingsData);
-		await videoSettingsDbObj.save();
-
-		res.send({ id: videoid });
 	} catch (err) {
 		console.log(err);
 		const { status, message, success } = err;

@@ -12,6 +12,7 @@
 	},
 	"404-go-back": "Text of button on the 404 error page",
 	"404-image-description": "Text for the alt attribute of the image on the 404 error page",
+	"downloading-to-server": "Fetching the video",
 	"error-process": "Error message for when the video processing fails",
 	"error-retrieve-data": "Error message when retrieving video data",
 	"error-file-not-exist": "Error message when file does not exist on Commons",

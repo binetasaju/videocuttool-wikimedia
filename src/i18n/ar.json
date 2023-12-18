@@ -1,14 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
+			"Hanzo64",
 			"Meno25",
 			"محمد أحمد عبد الفتاح"
 		]
 	},
+	"copyrighted-video-upload-restriction": "قيود حقوق النشر على تحميل الفيديو المحمي",
 	"404-go-back": "اذهب إلى الصفحة الرئيسية",
 	"404-image-description": "404 الصفحة غير موجودة",
+	"downloading-to-server": "جارٍ جلب الفيديو",
+	"documentation": "التوثيق/ المستندات",
 	"file-not-existing": "الملف غير موجود",
 	"footer-authors": "$1 و$2",
+	"internet-connection-lost": "الخادم غير متاح أو أنت غير متصل بالإنترنت",
 	"languages": "اللغات",
 	"login": "تسجيل الدخول",
 	"login-alert": "الرجاء تسجيل الدخول لاستخدام الأداة",
@@ -69,6 +74,8 @@
 	"upload-tab-video-url": "رابط الفيديو",
 	"upload-text": "النص",
 	"upload-upload-text": "انقر أو اسحب الفيديو إلى هذه المنطقة للتحميل",
+	"upload-wizard": "مُعالِج الرَّفع",
+	"upload-wizard-redirect": "قم بتحميل مقاطع الفيديو باستخدام معالج الرفع إذا لم تكن تمتلك حقوق الطبع والنشر",
 	"video-trim-from": "من",
 	"video-trim-more": "أضف المزيد",
 	"video-trim-more-concatenate": "تسلسل في فيديو واحد",

@@ -6,6 +6,7 @@
 		]
 	},
 	"error-file-not-exist": "Датотека не постоји на Викимедијиној остави",
+	"documentation": "Документација",
 	"file-not-existing": "Датотека не постоји",
 	"footer-authors": "$1 и $2",
 	"languages": "Језици",
@@ -61,6 +62,7 @@
 	"upload-tab-upload-video": "Отпреми видео",
 	"upload-tab-video-url": "URL видеа",
 	"upload-text": "Текст",
+	"upload-wizard": "Водич за отпремање",
 	"video-trim-from": "Од",
 	"video-trim-more": "Додај још",
 	"warning-exists-message": "Датотека с’тим називом већ постоји.",

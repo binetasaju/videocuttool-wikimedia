@@ -10,7 +10,7 @@
 			"Verdy p"
 		]
 	},
-	"copyrighted-video-upload-restriction":"Copyrighted video upload restriction",
+	"copyrighted-video-upload-restriction": "Copyrighted video upload restriction",
 	"404-go-back": "Text of button on the 404 error page",
 	"404-image-description": "Text for the alt attribute of the image on the 404 error page",
 	"downloading-to-server": "Fetching the video",
@@ -105,8 +105,8 @@
 	"upload-tab-video-url": "Title of the tab that lets the user select a video by url",
 	"upload-text": "Title of the text area where a text for the upload may be given",
 	"upload-upload-text": "Click or drag video to this area to upload",
-	"upload-wizard":"Upload Wizard",
-	"upload-wizard-redirect":"Upload videos using Upload Wizard if you don't own the copyright",
+	"upload-wizard": "Upload Wizard",
+	"upload-wizard-redirect": "Upload videos using Upload Wizard if you don't own the copyright",
 	"video-trim-from": "The trim from label on a trim section",
 	"video-trim-more": "Text of the button to add another trim",
 	"video-trim-more-concatenate": "Concatenate if multiple trims are added",

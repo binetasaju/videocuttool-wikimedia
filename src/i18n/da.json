@@ -2,13 +2,18 @@
 	"@metadata": {
 		"authors": [
 			"Peterleth",
-			"Saederup92"
+			"Saederup92",
+			"Zakawer2"
 		]
 	},
+	"copyrighted-video-upload-restriction": "Begrænsning af oplægning af videoer beskyttet under ophavsret",
 	"404-go-back": "Gå til forsiden",
 	"404-image-description": "404 Siden blev ikke fundet",
+	"downloading-to-server": "Henter videoen",
+	"documentation": "Dokumentation",
 	"file-not-existing": "Filen findes ikke",
 	"footer-authors": "$1 og $2",
+	"internet-connection-lost": "Server ikke tilgængelig eller du er offline",
 	"languages": "Sprog",
 	"login": "Registrer / Log ind",
 	"login-alert": "Log venligst ind for at bruge værktøjet",
@@ -63,6 +68,8 @@
 	"upload-tab-video-url": "Video URL",
 	"upload-text": "Tekst",
 	"upload-upload-text": "Klik eller træk video til dette område for at uploade",
+	"upload-wizard": "Vejviser til oplægning af filer",
+	"upload-wizard-redirect": "Upload videoer ved hjælp af »Vejviser til oplægning af filer«, hvis du ikke ejer ophavsretten",
 	"video-trim-from": "Fra",
 	"video-trim-more": "Tilføj flere",
 	"video-trim-title": "VideoTrim-indstillinger",

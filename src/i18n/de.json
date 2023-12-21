@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Brettchenweber",
+			"Caro",
 			"Distel135",
 			"DraconicDark",
 			"FF-11",
@@ -12,16 +13,20 @@
 			"ManuelFranz"
 		]
 	},
+	"copyrighted-video-upload-restriction": "Einschränkung beim Hochladen von urheberrechtlich geschützten Videos",
 	"404-go-back": "Zur Hauptseite gehen",
 	"404-image-description": "404 Seite nicht gefunden",
+	"downloading-to-server": "Das Video wird abgerufen",
 	"error-process": "Während des Vorgangs ist ein Fehler aufgetreten",
 	"error-retrieve-data": "Beim Abrufen der Videodaten ist ein Fehler aufgetreten",
 	"error-file-not-exist": "Die Datei existiert nicht auf Wikimedia Commons",
 	"error-worker": "Bei der Verarbeitung des Videos (Worker) ist ein Fehler aufgetreten.",
 	"enabled-features": "Eingeschaltet $1",
+	"documentation": "Dokumentation",
 	"file-not-existing": "Datei ist nicht vorhanden",
 	"footer-authors": "$1 und $2",
 	"guide-to-use": "Anleitung zur Verwendung",
+	"internet-connection-lost": "Der Server ist nicht verfügbar oder Sie sind offline",
 	"languages": "Sprachen",
 	"login": "Anmelden",
 	"login-alert": "Bitte melde dich an, um das Werkzeug zu nutzen",

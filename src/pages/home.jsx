@@ -14,8 +14,10 @@ import logo from '../logo.svg';
 import '../style/main.scss';
 import '../style/dark-theme.scss';
 import Footer from '../components/Footer';
+import { VideoDetailsContext } from '../context/VideoDetailsContext';
+import { fetchQueryParams } from '../utils/video';
 
-const { backend_url: backendUrl, phab_link, base_wiki_url } = ENV_SETTINGS();
+const { backend_url: backendUrl } = ENV_SETTINGS();
 const currentUser = getStoredItem('user');
 
 socket.on('connect', () => {
@@ -33,20 +35,17 @@ function Home() {
 	const { appState, updateAppState } = useContext(GlobalContext);
 	const { notifications } = appState || {};
 	const { setCurrentUser } = useContext(UserContext);
+	const { videoDetails, setVideoDetails } = useContext(VideoDetailsContext);
 
 	const [showHeader, setShowHeader] = useState(false);
-	const [title, setTitle] = useState('');
+
 	const userLocalStorage = getStoredItem('user');
 
 	socket.on('update', data => {
 		const { socketId } = data;
 		updateAppState({ socketId });
-		const location = window.location.href;
-		if (location.indexOf('?') !== -1) {
-			setTitle(`${base_wiki_url}/wiki/File:${location.split('?')[1].split('=')[1]}`);
-		} else {
-			setTitle('');
-		}
+		const params = fetchQueryParams(videoDetails);
+		setVideoDetails(params);
 	});
 
 	useEffect(() => {
@@ -64,12 +63,8 @@ function Home() {
 
 		// Update current user
 		setCurrentUser(userLocalStorage);
-		const location = window.location.href;
-		if (location.indexOf('?') !== -1) {
-			setTitle(`${base_wiki_url}/wiki/File:${location.split('?')[1].split('=')[1]}`);
-		} else {
-			setTitle('');
-		}
+		const params = fetchQueryParams(videoDetails);
+		setVideoDetails(params);
 	}, []);
 
 	const [isOnline, setIsOnline] = useState(true);
@@ -122,7 +117,7 @@ function Home() {
 						<Message id="title" />
 					</h1>
 				</div>
-				<UrlBox title={title} />
+				<UrlBox />
 				<Footer />
 			</div>
 

@@ -1,5 +1,5 @@
 import { useState, useRef, useContext, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { Message } from '@wikimedia/react.i18n';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Spinner, Form } from 'react-bootstrap';
@@ -8,13 +8,20 @@ import { UserContext } from '../context/UserContext';
 import { VideoDetailsContext } from '../context/VideoDetailsContext';
 import { checkFileExist, fetchViaUrl, fetchVideoId } from '../utils/video';
 
-
-function UrlBox(props) {
+function UrlBox() {
 	const navigate = useNavigate();
 	const { updateAppState, setUploadedVideo } = useContext(GlobalContext);
-	const { setVideoDetails, setVideoUrl, setFile, setVideoId, setCurrentSubStep, setCurrentStep } = useContext(VideoDetailsContext);
+	const {
+		setVideoDetails,
+		setVideoUrl,
+		setFile,
+		setVideoId,
+		setCurrentSubStep,
+		setCurrentStep,
+		videoDetails
+	} = useContext(VideoDetailsContext);
 	const { currentUser } = useContext(UserContext);
-	const { title: requiredTitle } = props;
+	const { title: requiredTitle = '', categories = [] } = videoDetails || {};
 	const allowedExtensions = 'mp4,webm,mov,flv,ogv,mpg,mpeg';
 	const [mouseHover, setMouseHover] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -33,11 +40,21 @@ function UrlBox(props) {
 	};
 
 	useEffect(() => {
-		fetchViaUrl(updateAppState, setVideoDetails, setVideoUrl, setVideoId, navigate, currentUser, setCurrentSubStep, setLoading);
+		fetchViaUrl(
+			updateAppState,
+			setVideoDetails,
+			setVideoUrl,
+			setVideoId,
+			navigate,
+			currentUser,
+			setCurrentSubStep,
+			setLoading,
+			categories
+		);
 	}, []);
 
-
-	const onFileUpload = async (e) => {
+	const onFileUpload = async e => {
+		console.log(categories);
 		const files = (e.dataTransfer && e.dataTransfer.files) || e.nativeEvent.target.files;
 		if (files.length === 0) {
 			return;
@@ -51,14 +68,25 @@ function UrlBox(props) {
 		}
 
 		setFile(files[0]);
-		const fileurl = URL.createObjectURL(files[0])
+		const fileurl = URL.createObjectURL(files[0]);
 		setVideoUrl(fileurl);
 		setVideoDetails({
-			title: files[0].name.replace(/\s/g, '_')
+			...videoDetails,
+			...{
+				title: files[0].name.replace(/\s/g, '_')
+			}
 		});
 		await fetchVideoId(
-			files[0].name.replace(/\s/g, '_')
-			, fileurl, files[0], setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState, setVideoUrl);
+			files[0].name.replace(/\s/g, '_'),
+			fileurl,
+			files[0],
+			setVideoId,
+			navigate,
+			currentUser,
+			setCurrentSubStep,
+			updateAppState,
+			setVideoUrl
+		);
 		setUploadedVideo(1);
 	};
 
@@ -72,24 +100,47 @@ function UrlBox(props) {
 
 	useEffect(() => {
 		setTitle(requiredTitle);
-		checkFileExist(requiredTitle, updateAppState, setVideoDetails, setVideoUrl, setCurrentStep);
+		checkFileExist(
+			requiredTitle,
+			updateAppState,
+			setVideoDetails,
+			setVideoUrl,
+			setCurrentStep,
+			categories
+		);
 	}, [requiredTitle]);
 
-	const onUrlInput = async (e) => {
-		const inputURl = e.target.value
+	const onUrlInput = async e => {
+		const inputURl = e.target.value;
 		if (inputURl.includes('https://commons.wikimedia.org/wiki/File')) {
 			setTimeout(() => {
 				setLoading(true);
-			}, 2000)
+			}, 2000);
 		}
 		setTitle(inputURl);
 		try {
-			const result = await checkFileExist(inputURl, updateAppState, setVideoDetails, setVideoUrl, setLoading);
+			const result = await checkFileExist(
+				inputURl,
+				updateAppState,
+				setVideoDetails,
+				setVideoUrl,
+				setLoading,
+				categories
+			);
 			if (result) {
-				fetchVideoId(result.title, result.url, null, setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState, setVideoUrl);
+				fetchVideoId(
+					result.title,
+					result.url,
+					null,
+					setVideoId,
+					navigate,
+					currentUser,
+					setCurrentSubStep,
+					updateAppState,
+					setVideoUrl
+				);
 			}
-		}
-		catch (e) {
+		} catch (e) {
 			console.log(e);
 		}
 	};
@@ -118,7 +169,7 @@ function UrlBox(props) {
 						/>
 						<div
 							className="drop-area"
-							data-mouseover={mouseHover ? "true" : "false"}
+							data-mouseover={mouseHover ? 'true' : 'false'}
 							onDragEnter={dragEnter}
 							onDragLeave={dragLeave}
 							onDragOver={dragOver}
@@ -150,6 +201,5 @@ function UrlBox(props) {
 			)}
 		</>
 	);
-
 }
 export default UrlBox;

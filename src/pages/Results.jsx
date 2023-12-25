@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
 import { Button, ButtonGroup, ToggleButton, Form, InputGroup } from 'react-bootstrap';
 
 import { Upload, Download, CardHeading, CardText, ChatLeftTextFill } from 'react-bootstrap-icons';
@@ -18,9 +18,9 @@ import { List } from 'react-bootstrap-icons';
 import logo from '../logo.svg';
 import { Image } from 'react-bootstrap';
 import Notification from '../components/Notification';
-import closeIcon from "../close.svg"
-import penicon from "../pen.svg";
-import downicon from "../Down.svg"
+import closeIcon from '../close.svg';
+import penicon from '../pen.svg';
+import downicon from '../Down.svg';
 const { uploadwizard_link } = ENV_SETTINGS();
 
 const API_URL = ENV_SETTINGS().backend_url;
@@ -31,7 +31,8 @@ function Results() {
 	const banana = useContext(BananaContext);
 	const { appState, updateAppState, uploadedVideo } = useContext(GlobalContext);
 	const { notifications } = appState || {};
-	const { videos, videoDetails, setVideoUrl, processTime, setCurrentSubStep } = useContext(VideoDetailsContext);
+	const { videos, videoDetails, setVideoUrl, processTime, setCurrentSubStep } =
+		useContext(VideoDetailsContext);
 	const { currentUser: user } = useContext(UserContext);
 	const [videoState, setVideoState] = useState([]);
 	const [showProgress, setShowProgress] = useState(false);
@@ -41,28 +42,24 @@ function Results() {
 	const [isDisabled2, setIsDisabled2] = useState(true);
 	const [isChecked, setIsChecked] = useState(true);
 
-
 	const enableTextarea = () => {
 		if (isDisabled) {
 			setIsDisabled(false);
-		}
-		else {
+		} else {
 			setIsDisabled(true);
 		}
 	};
 	const enableTextarea1 = () => {
 		if (isDisabled1) {
 			setIsDisabled1(false);
-		}
-		else {
+		} else {
 			setIsDisabled1(true);
 		}
 	};
 	const enableTextarea2 = () => {
 		if (isDisabled2) {
 			setIsDisabled2(false);
-		}
-		else {
+		} else {
 			setIsDisabled2(true);
 		}
 	};
@@ -86,7 +83,7 @@ function Results() {
 	};
 
 	useEffect(() => {
-		const { title, author, comment = '' } = videoDetails;
+		const { title, author, comment = '', categories = [] } = videoDetails;
 		const [day, month, year] = new Date()
 			.toLocaleDateString('en-GB', {
 				year: 'numeric',
@@ -117,6 +114,7 @@ function Results() {
 		if (subcomment === '') {
 			subcomment += 'not edited ';
 		}
+		console.log(categories);
 		// To avoid merging actions into single words, add a space after each action name.
 		const videosWithDetails = videos.map((video, index) => {
 			const newExtension = video.split('.');
@@ -133,12 +131,16 @@ function Results() {
 					'=={{int:filedesc}}==',
 					`{{Information${comment?.length > 0 ? `\n|description=${comment}` : ''}`,
 					`|date=${`${year}-${month}-${day}`}`,
-					`|source={{Derived from|1=${title}}}${author?.length > 0 ? `\n|author=[[User:${author}|${author}]]` : ''
+					`|source={{Derived from|1=${title}}}${
+						author?.length > 0 ? `\n|author=[[User:${author}|${author}]]` : ''
 					}`,
 					'}}\n',
 					'=={{int:license-header}}==',
 					'{{self|cc-by-sa-4.0}}\n',
 					'[[Category:VideoCutTool]]\n',
+					...(categories &&
+						categories.length > 0 &&
+						categories.map(category => `[[Category:${category}]]`)),
 					`{{Extracted from|File:${title}}}`
 				].join('\n'),
 				selectedOptionName: 'new-file',
@@ -170,9 +172,17 @@ function Results() {
 	};
 
 	const uploadVideo = async () => {
-		await uploadVideos(setShowProgress, videoState, user, wantTitle, updateAppState, setVideoUrl, setCurrentSubStep, navigate);
+		await uploadVideos(
+			setShowProgress,
+			videoState,
+			user,
+			wantTitle,
+			updateAppState,
+			setVideoUrl,
+			setCurrentSubStep,
+			navigate
+		);
 	};
-
 
 	const handleDownload = (videoPath, videoTitle) => {
 		const downloadData = {
@@ -216,41 +226,62 @@ function Results() {
 						{videoState.map((video, index) => (
 							<div className="video-results-wrapper" key={`wrapper-${index}`}>
 								<div className={`row ${video.displayUploadToCommons === false && 'd-none'}`}>
-									<div className='alignment'>
+									<div className="alignment">
 										<div className="video-player-wrapper">
 											<VideoPlayer videoUrl={`${API_URL}/${video.path}`} />
 										</div>
 										<div className="video-options col-md-5">
 											{video.selectedOptionName === 'new-file' && (
-												<InputGroup className="mb-3 input-group-style" title={banana.i18n('upload-action-new-file-title')}>
-													<div className='input-dropdown'>
-														<Form.Label className="input-lable-style" htmlFor="videoTitle">Video Title</Form.Label>
+												<InputGroup
+													className="mb-3 input-group-style"
+													title={banana.i18n('upload-action-new-file-title')}
+												>
+													<div className="input-dropdown">
+														<Form.Label className="input-lable-style" htmlFor="videoTitle">
+															Video Title
+														</Form.Label>
 													</div>
-													<div className='d-flex'>
+													<div className="d-flex">
 														<Form.Control
 															className={`input-input-style ${isDisabled1 ? 'disabled-input' : ''}`}
 															type="text"
 															defaultValue={video.title}
 															onChange={e => updateTitle(index, e.target.value)}
 															disabled={isDisabled1}
-														/> <Button className={`pen-button`} onClick={enableTextarea1}>
+														/>{' '}
+														<Button className={`pen-button`} onClick={enableTextarea1}>
 															<img src={isDisabled1 ? penicon : closeIcon} alt="" />
-														</Button></div>
+														</Button>
+													</div>
 												</InputGroup>
 											)}
 											{isChecked && (
 												<>
-													<InputGroup className="mb-3 input-group-style" title={banana.i18n('upload-comment')}>
-														<div className='input-dropdown'>
-															<Form.Label className="input-lable-style" htmlFor="videocomment">Video Comment</Form.Label>
+													<InputGroup
+														className="mb-3 input-group-style"
+														title={banana.i18n('upload-comment')}
+													>
+														<div className="input-dropdown">
+															<Form.Label className="input-lable-style" htmlFor="videocomment">
+																Video Comment
+															</Form.Label>
 														</div>
-														<div className='d-flex'>
-															<Form.Control disabled={isDisabled} type="text" className={`input-input-style ${isDisabled ? 'disabled-input' : ''}`} defaultValue={video.comment} onChange={e => updateComment(index, e.target.value)} />
-															<Button className={`pen-button`} onClick={enableTextarea} >
+														<div className="d-flex">
+															<Form.Control
+																disabled={isDisabled}
+																type="text"
+																className={`input-input-style ${
+																	isDisabled ? 'disabled-input' : ''
+																}`}
+																defaultValue={video.comment}
+																onChange={e => updateComment(index, e.target.value)}
+															/>
+															<Button className={`pen-button`} onClick={enableTextarea}>
 																<img src={penicon} alt="" />
-															</Button></div>
+															</Button>
+														</div>
 													</InputGroup>
-													<div className="form-group" >
+													<div className="form-group">
 														<label className="input-lable-style">Upload option</label>
 														<Form className="mb-2">
 															<Form.Check
@@ -260,31 +291,42 @@ function Results() {
 																type="radio"
 																name="upload-type"
 																checked={video.selectedOptionName === 'overwrite'}
-															>
-															</Form.Check>
+															></Form.Check>
 															<Form.Check
-
 																label={<Message id="upload-action-new-file" />}
 																variant="secondary"
 																onClick={() => updateUploadType(index, 'new-file')}
 																type="radio"
 																name="upload-type"
 																checked={video.selectedOptionName === 'new-file'}
-															>
-
-															</Form.Check>
+															></Form.Check>
 														</Form>
 													</div>
 
-													<InputGroup className="mb-3 input-group-style" title={banana.i18n('upload-text')}>
-														<div className='input-dropdown'>
-															<Form.Label htmlFor="summary" className="input-lable-style">Video Summary</Form.Label>
+													<InputGroup
+														className="mb-3 input-group-style"
+														title={banana.i18n('upload-text')}
+													>
+														<div className="input-dropdown">
+															<Form.Label htmlFor="summary" className="input-lable-style">
+																Video Summary
+															</Form.Label>
 														</div>
-														<div className='d-flex'>
-															<Form.Control disabled={isDisabled2} className={`input-input-style ${isDisabled2 ? 'disabled-input' : ''}`} as="textarea" rows={15} defaultValue={video.text} onChange={e => updateWikiText(index, e.target.value)} />
+														<div className="d-flex">
+															<Form.Control
+																disabled={isDisabled2}
+																className={`input-input-style ${
+																	isDisabled2 ? 'disabled-input' : ''
+																}`}
+																as="textarea"
+																rows={15}
+																defaultValue={video.text}
+																onChange={e => updateWikiText(index, e.target.value)}
+															/>
 															<Button className={`pen-button`} onClick={enableTextarea2}>
 																<img src={penicon} alt="" />
-															</Button></div>
+															</Button>
+														</div>
 													</InputGroup>
 												</>
 											)}
@@ -331,7 +373,9 @@ function Results() {
 													</Button>
 												)}
 												<Button
-													onClick={() => handleDownload(video.path.replace('/public', ''), video.title)}
+													onClick={() =>
+														handleDownload(video.path.replace('/public', ''), video.title)
+													}
 												>
 													<span className="button-title ms-3">
 														<Message id="step-result-choice-download" />
@@ -342,7 +386,6 @@ function Results() {
 									</div>
 								</div>
 							</div>
-
 						))}
 					</div>
 					<div className="upload-progress-container">

@@ -1,8 +1,6 @@
 import ENV_SETTINGS from '../env';
 const { phab_link, base_wiki_url, backend_url: API_URL, file_url } = ENV_SETTINGS();
 
-
-
 /**
  * Get video date from either commons site or user uploads
  *
@@ -16,7 +14,8 @@ const retrieveVideoData = async (
 	videoTitle,
 	updateAppState,
 	setVideoDetails,
-	setVideoUrl
+	setVideoUrl,
+	categories
 ) => {
 	if (!videoUrl.includes('commons.wikimedia.org')) {
 		return;
@@ -41,16 +40,17 @@ const retrieveVideoData = async (
 			setVideoDetails({
 				author: user,
 				title: decodeURIComponent(canonicaltitle.slice(5)).replace(/\s/g, '_'),
-				comment
+				comment,
+				categories
 			});
 			return {
 				author: user,
 				title: decodeURIComponent(canonicaltitle.slice(5)).replace(/\s/g, '_'),
 				comment,
-				url
+				url,
+				categories
 			};
 		}
-
 	} catch (err) {
 		updateAppState({
 			notification: {
@@ -75,7 +75,9 @@ const checkFileExist = async (
 	filePath,
 	updateAppState,
 	setVideoDetails,
-	setVideoUrl, setLoading
+	setVideoUrl,
+	setLoading,
+	categories
 ) => {
 	// First check if pattern File:(filename) exists
 	const matchPath = filePath.match(/File:(.*)$/);
@@ -104,10 +106,10 @@ const checkFileExist = async (
 			fileName,
 			updateAppState,
 			setVideoDetails,
-			setVideoUrl
+			setVideoUrl,
+			categories
 		);
 		return result;
-
 	} catch (err) {
 		setLoading(false);
 		updateAppState({
@@ -175,7 +177,6 @@ const uploadVideos = async (
 	setCurrentSubStep,
 	navigate
 ) => {
-
 	setShowProgress(true);
 	const uploadData = {
 		upload: true,
@@ -258,7 +259,17 @@ function toTitleCase(type) {
 	return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
-const fetchVideoId = async (title, url, file, setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState, setVideoUrl) => {
+const fetchVideoId = async (
+	title,
+	url,
+	file,
+	setVideoId,
+	navigate,
+	currentUser,
+	setCurrentSubStep,
+	updateAppState,
+	setVideoUrl
+) => {
 	const formData = new FormData();
 	formData.append('title', JSON.stringify(title));
 	formData.append('url', JSON.stringify(url));
@@ -267,17 +278,17 @@ const fetchVideoId = async (title, url, file, setVideoId, navigate, currentUser,
 	try {
 		const response = await fetch(`${API_URL}/register`, {
 			method: 'POST',
-			body: formData,
+			body: formData
 		});
 
 		const data = await response.json();
 		if (!response.ok) {
 			throw data;
 		}
-		const apiPath = data.path.replace("/app/server", "/api");
-		setVideoUrl(apiPath)
+		const apiPath = data.path.replace('/app/server', '/api');
+		setVideoUrl(apiPath);
 		setVideoId(data.id);
-		navigate(`/edit/${data.id}`)
+		navigate(`/edit/${data.id}`);
 	} catch (err) {
 		if (err.message) {
 			setCurrentSubStep('');
@@ -294,22 +305,74 @@ const fetchVideoId = async (title, url, file, setVideoId, navigate, currentUser,
 	}
 };
 
-const fetchViaUrl = async (updateAppState, setVideoDetails, setVideoUrl, setVideoId, navigate, currentUser, setCurrentSubStep, setLoading) => {
-	const currentUrl = window.location.href;
-	if (!currentUrl.includes('title')) {
+const fetchViaUrl = async (
+	updateAppState,
+	setVideoDetails,
+	setVideoUrl,
+	setVideoId,
+	navigate,
+	currentUser,
+	setCurrentSubStep,
+	setLoading,
+	categories
+) => {
+	const currentUrl = new URL(window.location.href);
+	const title = currentUrl.searchParams.get('title');
+	if (!title) {
 		return;
 	}
-	const decodedTitle = decodeURIComponent(currentUrl.split('?title=')[1]);
+	const decodedTitle = decodeURIComponent(title);
 	const originalUrl = `${file_url}${decodedTitle}`;
 	try {
-		const result = await checkFileExist(originalUrl, updateAppState, setVideoDetails, setVideoUrl, setLoading);
+		const result = await checkFileExist(
+			originalUrl,
+			updateAppState,
+			setVideoDetails,
+			setVideoUrl,
+			setLoading,
+			categories
+		);
 		if (result) {
-			fetchVideoId(result.title, result.url, null, setVideoId, navigate, currentUser, setCurrentSubStep, updateAppState, setVideoUrl);
+			fetchVideoId(
+				result.title,
+				result.url,
+				null,
+				setVideoId,
+				navigate,
+				currentUser,
+				setCurrentSubStep,
+				updateAppState,
+				setVideoUrl
+			);
 		}
-	}
-	catch (e) {
+	} catch (e) {
 		console.log(e);
 	}
-}
+};
 
-export { checkFileExist, processVideo, uploadVideos, toTitleCase, fetchVideoId, fetchViaUrl };
+/**
+ * Fetch query params from url
+ *
+ * @returns {object} params
+ */
+
+const fetchQueryParams = oldVideoDetails => {
+	const location = new URL(window.location.href);
+	const title = location.searchParams.get('title');
+	const categories = location.searchParams.getAll('category');
+	const params = {
+		...(title && { title: `${base_wiki_url}/wiki/File:${title}` }),
+		...(categories && categories.length > 0 && { categories })
+	};
+	return { ...oldVideoDetails, ...params };
+};
+
+export {
+	checkFileExist,
+	processVideo,
+	uploadVideos,
+	toTitleCase,
+	fetchVideoId,
+	fetchViaUrl,
+	fetchQueryParams
+};

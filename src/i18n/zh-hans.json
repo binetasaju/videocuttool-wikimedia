@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"GuoPC",
+			"LittlePaw365",
 			"Shizhao",
 			"Si109",
 			"StarrySky",
@@ -85,8 +86,8 @@
 	"task-uploading": "正在上传",
 	"task-uploading-wikimedia-commons": "正在上传到维基共享资源",
 	"task-uploaded-wikimedia-commons-footer": "您可以在$1查看该视频",
-	"theme-darkmode": "暗色",
-	"theme-lightmode": "亮色",
+	"theme-darkmode": "深色",
+	"theme-lightmode": "浅色",
 	"title": "VideoCutTool",
 	"trim-add-timeline": "添加时间轴",
 	"trim-total-duration": "总修剪时间",

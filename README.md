@@ -179,6 +179,16 @@ If you face any issues regarding setting up beta instance, feel free to raise yo
 - cd `/app/VideoCutTool`
 - Sync to the master using `./server-sync.sh`
 
+### For Users 
+You can use VideoCutTool as a gadget in itself, by configuring your Wikimedia Commons account. 
+We essentially pass the title and categories as query params to the url 
+
+#### Passing query parameters 
+You can manually also pass the query parameters to the url, and the tool will automatically fill the title and categories fields. 
+Follow the below format to pass the query parameters 
+`https://videocuttool.wmcloud.org/?title=<title>&category=<category1>&category=<category2>`
+where categories can be passed multiple times, and all of them would be added to the categories field.
+
 ### Acknowledgments
 
 VideoCutTool owes its existence to the dedication and collaborative efforts of several individuals who have played crucial roles in its development and maintenance:

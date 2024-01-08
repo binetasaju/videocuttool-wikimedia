@@ -138,10 +138,9 @@ function Results() {
 					'=={{int:license-header}}==',
 					'{{self|cc-by-sa-4.0}}\n',
 					'[[Category:VideoCutTool]]\n',
-					...(categories &&
-						categories.length > 0 &&
-						categories.map(category => `[[Category:${category}]]`)),
-					`{{Extracted from|File:${title}}}`
+					...(categories && categories.length > 0
+						? categories.map(category => `[[Category:${category}]]`)
+						: [])
 				].join('\n'),
 				selectedOptionName: 'new-file',
 				displayUploadToCommons: true

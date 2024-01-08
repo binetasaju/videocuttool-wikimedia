@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Gogchannel",
 			"LaMagiaaa",
 			"MagicAho",
 			"MathXplore",
@@ -79,6 +80,7 @@
 	"upload-tab-video-url": "動画のURL",
 	"upload-text": "テキスト",
 	"upload-upload-text": "このエリアをクリックするか、アップロードする動画をドラッグする",
+	"upload-wizard": "アップロードウィザード",
 	"video-trim-from": "開始点",
 	"video-trim-more": "さらに追加",
 	"video-trim-more-concatenate": "1本の動画に統合",

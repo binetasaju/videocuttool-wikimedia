@@ -41,6 +41,7 @@ function Results() {
 	const [isDisabled1, setIsDisabled1] = useState(true);
 	const [isDisabled2, setIsDisabled2] = useState(true);
 	const [isChecked, setIsChecked] = useState(true);
+	const [showHeader, setShowHeader] = useState(false);
 
 	const enableTextarea = () => {
 		if (isDisabled) {

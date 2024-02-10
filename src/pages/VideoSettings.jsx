@@ -115,6 +115,7 @@ function VideoSettings() {
 	const [canPreview, setCanPreview] = useState(false);
 	const [currentSetting, setCurrentSetting] = useState(false);
 	const [currentVolume, setCurrentVolume] = useState(100);
+	const [showHeader, setShowHeader] = useState(false);
 
 	useEffect(() => {
 		if (uploadedVideo) {

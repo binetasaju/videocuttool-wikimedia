@@ -54,7 +54,7 @@ function UrlBox() {
 	}, []);
 
 	const onFileUpload = async e => {
-		console.log(categories);
+		setLoading(true);
 		const files = (e.dataTransfer && e.dataTransfer.files) || e.nativeEvent.target.files;
 		if (files.length === 0) {
 			return;

@@ -89,7 +89,7 @@
 	"task-uploaded-wikimedia-commons-footer-cover": "Shows the title for the hyperlink for \"Uploaded to Wikimedia Commons\" task",
 	"theme-darkmode": "Display dark mode title",
 	"theme-lightmode": "Display light mode title",
-	"title": "Display the title of the tool",
+	"title": "{{Optional}}\nDisplay the title of the tool",
 	"trim-add-timeline": "Text of the button that adds a trimmed section to the timeline",
 	"trim-total-duration": "Shows the total duration for all trims",
 	"total-time-editing": "Total time spent editing the video",

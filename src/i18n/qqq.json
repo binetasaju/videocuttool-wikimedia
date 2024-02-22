@@ -86,7 +86,7 @@
 	"task-uploading": "Shows that the current task is \"uploading\"",
 	"task-uploading-wikimedia-commons": "Shows that the current task is \"uploading to Wikimedia Commons\"",
 	"task-uploaded-wikimedia-commons-footer": "Shows the footer for the \"Uploaded to Wikimedia Commons\" task",
-	"task-uploaded-wikimedia-commons-footer-cover": "Shows the title for the hyperlink for \"Uploaded to Wikimedia Commons\" task",
+	"task-uploaded-wikimedia-commons-footer-cover": "Shows the title for the hyperlink for \"Uploaded to Wikimedia Commons\" task ({{msg-wm|videocuttool-task-uploaded-wikimedia-commons}})",
 	"theme-darkmode": "Display dark mode title",
 	"theme-lightmode": "Display light mode title",
 	"title": "{{Optional}}\nDisplay the title of the tool",

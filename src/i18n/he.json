@@ -14,6 +14,7 @@
 	"error-process": "אירעה שגיאה תוך כדי התהליך",
 	"error-retrieve-data": "משהו השתבש בעת אחזור נתוני הסרטון",
 	"error-file-not-exist": "הקובץ לא קיים בוויקישיתוף",
+	"error-worker": "אירעה שגיאה במהלך עיבוד הווידאו (עובד).",
 	"enabled-features": "הופעלו $1",
 	"documentation": "תיעוד",
 	"file-not-existing": "הקובץ לא קיים",

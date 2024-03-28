@@ -25,7 +25,7 @@
 	"languages": "Langues",
 	"login": "Connexion",
 	"login-alert": "Veuillez vous connecter pour utiliser l’outil",
-	"login-alert-preview": "Vous devez être connecté pour prévisualiser et télécharger sur Commons",
+	"login-alert-preview": "Vous devez être connecté pour prévisualiser et téléverser vers Commons",
 	"login-alert-upload": "Se connecter pour téléverser vers Wikimedia Commons",
 	"login-error": "Erreur lors de la connexion",
 	"logout": "Se déconnecter",

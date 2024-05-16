@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Suleiman the Magnificent Television",
 			"Ykhwong",
 			"그냥기여자"
 		]
 	},
+	"copyrighted-video-upload-restriction": "저작권 보호 영상 업로드 제한",
 	"404-go-back": "메인 페이지로 이동",
 	"404-image-description": "404 페이지를 찾을 수 없음",
 	"enabled-features": "$1 켜짐",

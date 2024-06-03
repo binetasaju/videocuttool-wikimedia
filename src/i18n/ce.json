@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Исмаил Садуев",
 			"Умар"
 		]
 	},
@@ -49,7 +50,7 @@
 	"upload-action-new-file-title": "Корта",
 	"upload-action-overwrite": "Йухайазйе",
 	"upload-comment": "Коммент",
-	"upload-edit-button": "Нисйе видео",
+	"upload-edit-button": "Видео тойан",
 	"upload-tab-upload-video": "Чуйаккха видео",
 	"upload-tab-video-url": "Видео URL-адрес",
 	"upload-text": "Йоза",

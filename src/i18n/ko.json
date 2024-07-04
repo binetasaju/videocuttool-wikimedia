@@ -11,6 +11,7 @@
 	"404-image-description": "404 페이지를 찾을 수 없음",
 	"error-process": "프로세스 중에 오류가 발생",
 	"error-retrieve-data": "비디오 데이터를 검색하는 동안 뭔가 잘못되었습니다",
+	"error-file-not-exist": "위키미디어 공용에 파일이 존재하지 않습니다",
 	"enabled-features": "$1를 활성화",
 	"documentation": "설명문서",
 	"file-not-existing": "파일은 존재하지 않습니다",

@@ -74,13 +74,13 @@ cd ./VideoCutTool
 Run this command inside VideoCutTool to start development Docker container, if you operating system is Windows
 
 ```
-docker-compose -f .\docker-compose.dev.yml up --build -V
+docker compose -f .\docker-compose.dev.yml up --build -V
 ```
 
 If your operating system is other than Windows (Linux/Mac), run this command instead
 
 ```
-docker-compose -f ./docker-compose.dev.yml up --build -V
+docker compose -f ./docker-compose.dev.yml up --build -V
 ```
 
 The first time you run it will take some time (4-8 minutes depending on your internet speed) because it will pull the necessary images from Docker and install NPM packages. Once it is up and running changes will be hot loaded.
@@ -90,7 +90,7 @@ The first time you run it will take some time (4-8 minutes depending on your int
 To run production you can run this command:
 
 ```
-docker-compose -f .\docker-compose.prd.yml up -d
+docker compose -f .\docker-compose.prd.yml up -d
 ```
 
 for windows
@@ -98,10 +98,12 @@ for windows
 and
 
 ```
-docker-compose -f ./docker-compose.prd.yml up -d
+docker compose -f ./docker-compose.prd.yml up -d
 ```
 
 for other operating systems.
+
+> Note: If the command `docker compose` is not working, try using `docker-compose` instead.
 
 You are now good to go, and should have successfully set up the tool on your local machine for development. If you encounter any error while setting this up locally, do checkout our tickets on [phabricator](https://phabricator.wikimedia.org/tag/videocuttool/), if you could find something relevant there.
 
@@ -113,8 +115,8 @@ If you want to set up cloud services for production, follow here:
 
 Cloud VPS Horizon URL: <https://horizon.wikimedia.org>
 
-- videocuttool instance using `ssh -J <username>@primary.bastion.wmflabs.org <username>@videocuttool.videocuttool.eqiad1.wikimedia.cloud`
-- nc-videocuttool instance using `ssh -J <username>@primary.bastion.wmflabs.org <username>@nc-videocuttool.videocuttool.eqiad1.wikimedia.cloud`
+- prod (videocuttool) instance using `ssh -J <username>@primary.bastion.wmflabs.org <username>@videocuttool-bookworm.videocuttool.eqiad1.wikimedia.cloud`
+- beta (beta-videocuttool) instance using `ssh -J <username>@primary.bastion.wmflabs.org <username>@beta-videocuttool-bookworm.videocuttool.eqiad1.wikimedia.cloud`
 
 #### Installing VideoCutTool in cloud server
 
@@ -129,7 +131,7 @@ Install the following utilities:
 
 Set up your Cloud VPS Horizon, from the above tutorial.
 
-beta-videocuttool instance using `ssh -J <username>@primary.bastion.wmflabs.org <username>@beta-videocuttool.videocuttool.eqiad1.wikimedia.cloud`
+beta-videocuttool instance using `ssh -J <username>@primary.bastion.wmflabs.org <username>@beta-videocuttool-bookworm.videocuttool.eqiad1.wikimedia.cloud`
 
 > where _username_ is your gerrit-authorized username
 
@@ -170,6 +172,7 @@ via `apt` or some other package manager you prefer.
 - After installing these, go to `/app`, and use the above `git pull` command to get the repository on the beta-server
 - Now follow the above steps to set up crontab.
 - Make sure to run all the docker commands in the detached mode, via the -d flag
+- It is recommended to use the `docker-compose.dev.yml` file for beta instance, as it is more suitable for development purposes.
 
 If you face any issues regarding setting up beta instance, feel free to raise your queries on [phabricator](https://phabricator.wikimedia.org/tag/videocuttool/), or contact us via Zulip.
 
@@ -179,13 +182,15 @@ If you face any issues regarding setting up beta instance, feel free to raise yo
 - cd `/app/VideoCutTool`
 - Sync to the master using `./server-sync.sh`
 
-### For Users 
-You can use VideoCutTool as a gadget in itself, by configuring your Wikimedia Commons account. 
-We essentially pass the title and categories as query params to the url 
+### For Users
 
-#### Passing query parameters 
-You can manually also pass the query parameters to the url, and the tool will automatically fill the title and categories fields. 
-Follow the below format to pass the query parameters 
+You can use VideoCutTool as a gadget in itself, by configuring your Wikimedia Commons account.
+We essentially pass the title and categories as query params to the url
+
+#### Passing query parameters
+
+You can manually also pass the query parameters to the url, and the tool will automatically fill the title and categories fields.
+Follow the below format to pass the query parameters
 `https://videocuttool.wmcloud.org/?title=<title>&category=<category1>&category=<category2>`
 where categories can be passed multiple times, and all of them would be added to the categories field.
 

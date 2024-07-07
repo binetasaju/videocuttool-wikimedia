@@ -7,7 +7,7 @@ import { GlobalContext } from '../context/GlobalContext';
 import { UserContext } from '../context/UserContext';
 import { socket } from '../utils/socket';
 import Notification from '../components/Notification';
-import { clearItems, getStoredItem, storeItem } from '../utils/storage';
+import { clearItems, getItemWithExpiry, getStoredItem, storeItem } from '../utils/storage';
 import ENV_SETTINGS from '../env';
 import { Message } from '@wikimedia/react.i18n';
 import logo from '../logo.svg';
@@ -18,7 +18,7 @@ import { VideoDetailsContext } from '../context/VideoDetailsContext';
 import { fetchQueryParams } from '../utils/video';
 
 const { backend_url: backendUrl } = ENV_SETTINGS();
-const currentUser = getStoredItem('user');
+const currentUser = getItemWithExpiry('user');
 
 socket.on('connect', () => {
 	if (currentUser) {
@@ -39,7 +39,7 @@ function Home() {
 
 	const [showHeader, setShowHeader] = useState(false);
 
-	const userLocalStorage = getStoredItem('user');
+	const userLocalStorage = getItemWithExpiry('user');
 
 	socket.on('update', data => {
 		const { socketId } = data;

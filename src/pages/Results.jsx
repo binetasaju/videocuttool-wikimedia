@@ -21,6 +21,7 @@ import Notification from '../components/Notification';
 import closeIcon from '../close.svg';
 import penicon from '../pen.svg';
 import downicon from '../Down.svg';
+import { getItemWithExpiry } from '../utils/storage';
 const { uploadwizard_link } = ENV_SETTINGS();
 
 const API_URL = ENV_SETTINGS().backend_url;
@@ -93,11 +94,11 @@ function Results() {
 			})
 			.split('/');
 
-		const user = localStorage.getItem('user');
+		const user = getItemWithExpiry('user');
 		const { username } = JSON.parse(user);
-		const actions = localStorage.getItem('video-settings');
+		const actions = getItemWithExpiry('video-settings');
 		const changes = JSON.parse(actions);
-		const rotation = localStorage.getItem('video-manipulations');
+		const rotation = getItemWithExpiry('video-manipulations');
 		const rotationAmount = JSON.parse(rotation).rotate_value;
 		const titleArr = fileNameRegex.exec(title);
 		const newTitle = titleArr[1];

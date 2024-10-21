@@ -11,6 +11,7 @@
 	"error-process": "Proceso metu įvyko klaida",
 	"error-retrieve-data": "Gaunant vaizdo įrašo duomenis įvyko klaida",
 	"error-file-not-exist": "Failas Vikitekoje neegzistuoja",
+	"error-worker": "Apdorojant vaizdo įrašą įvyko klaida (darbuotojas).",
 	"enabled-features": "Įjungta $1",
 	"documentation": "Dokumentacija",
 	"file-not-existing": "Failas neegzistuoja",

@@ -129,8 +129,11 @@ app.get('/auth/mediawiki/callback', auth, async (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  delete req.session.user;
-  res.redirect('/');
+	// TODO: Implement a middleware for checking if the user is logged in
+
+	// deletes a cookie by saying maxAge = -1
+	res.cookie('user', '', { maxAge: -1 });
+	res.redirect('/');
 });
 
 app.post('/process', processVideo);

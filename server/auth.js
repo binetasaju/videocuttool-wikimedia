@@ -2,7 +2,7 @@ const config = require('./config.js');
 
 module.exports = async (req, res, next) => {
 	const { code } = req.query;
-	const { CLIENT_ID, CLIENT_SECRET, BASE_WIKI_URL } = config();
+	const { CLIENT_ID, CLIENT_SECRET, BASE_WIKI_URL, CLIENT_COOKIE_AGE } = config();
 
 	const params = new URLSearchParams();
 	params.append('grant_type', 'authorization_code');
@@ -24,17 +24,21 @@ module.exports = async (req, res, next) => {
 		const { access_token: accessToken, refresh_token: refreshToken } = fetchDataRes;
 		res.locals.refresh_token = refreshToken;
 
-		const getUserData = await fetch(
-			`${BASE_WIKI_URL}/w/rest.php/oauth2/resource/profile`,
-			{
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${accessToken}`
-				}
+		const getUserData = await fetch(`${BASE_WIKI_URL}/w/rest.php/oauth2/resource/profile`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${accessToken}`
 			}
-		);
+		});
 		const userData = await getUserData.json();
 		res.locals.profile = userData;
+
+		const userRow = {
+			mediawikiId: userData?.sub,
+			username: userData?.username
+		};
+		// TODO: change maxAge to match mediawiki oauth2 access token staleness
+		res.cookie('user', JSON.stringify(userRow), { maxAge: CLIENT_COOKIE_AGE });
 
 		next();
 	} catch (err) {

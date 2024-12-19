@@ -24,6 +24,7 @@
 	"logout-confirm-text": "Are you sure?",
 	"logout-confirm-yes": "Yes",
 	"logout-message":"Logged Out Successfully",
+	"logout-error": "Error while logging out",
 	"mute-enable":"Enable",
 	"mute-disable":"Disable",
 	"new-video": "Your New Video{{PLURAL:$1||s}} will be here:",

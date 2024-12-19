@@ -7,7 +7,7 @@ import { GlobalContext } from '../context/GlobalContext';
 import { UserContext } from '../context/UserContext';
 import { socket } from '../utils/socket';
 import Notification from '../components/Notification';
-import { clearItems, getItemWithExpiry, getStoredItem, storeItem } from '../utils/storage';
+import { clearItems, getCookies } from '../utils/storage';
 import ENV_SETTINGS from '../env';
 import { Message } from '@wikimedia/react.i18n';
 import logo from '../logo.svg';
@@ -18,7 +18,7 @@ import { VideoDetailsContext } from '../context/VideoDetailsContext';
 import { fetchQueryParams } from '../utils/video';
 
 const { backend_url: backendUrl } = ENV_SETTINGS();
-const currentUser = getItemWithExpiry('user');
+const currentUser = JSON.parse(decodeURIComponent(getCookies('user'))) || null;
 
 socket.on('connect', () => {
 	if (currentUser) {
@@ -34,12 +34,12 @@ socket.on('connect_error', err => {
 function Home() {
 	const { appState, updateAppState } = useContext(GlobalContext);
 	const { notifications } = appState || {};
-	const { setCurrentUser } = useContext(UserContext);
+	const { currentUser, setCurrentUser } = useContext(UserContext);
 	const { videoDetails, setVideoDetails } = useContext(VideoDetailsContext);
 
 	const [showHeader, setShowHeader] = useState(false);
 
-	const userLocalStorage = getItemWithExpiry('user');
+	const userLocalStorage = currentUser;
 
 	socket.on('update', data => {
 		const { socketId } = data;

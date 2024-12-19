@@ -10,7 +10,8 @@ const BASE_CONFIG = {
 	BASE_WIKI_URL: 'https://commons.wikimedia.org',
 	CLIENT_ID: process.env.CLIENT_ID,
 	CLIENT_SECRET: process.env.CLIENT_SECRET,
-	WORKER_LIMIT: process.env.WORKER_LIMIT
+	WORKER_LIMIT: process.env.WORKER_LIMIT,
+	CLIENT_COOKIE_AGE: 900000
 };
 
 const CONFIG = () => {

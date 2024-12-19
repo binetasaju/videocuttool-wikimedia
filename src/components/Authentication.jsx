@@ -1,16 +1,18 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, OverlayTrigger } from 'react-bootstrap';
 import { Message } from '@wikimedia/react.i18n';
 import { GlobalContext } from '../context/GlobalContext';
 import { onLogin, onLogOut } from '../utils/auth';
 import ENV_SETTINGS from '../env';
 
-const { base_wiki_url,backend_url } = ENV_SETTINGS();
+const { base_wiki_url, backend_url } = ENV_SETTINGS();
 import { UserContext } from '../context/UserContext';
 import GeneralPopover from './GeneralPopover';
 
 function Authentication() {
 	const { updateAppState } = useContext(GlobalContext);
+	const navigate = useNavigate();
 	const { setCurrentUser, currentUser: user } = useContext(UserContext);
 	// Login redirect URL to the back-end server
 	const handleLogin = () => {
@@ -18,12 +20,12 @@ function Authentication() {
 	};
 
 	const handleLogOut = () => {
-		onLogOut(updateAppState, setCurrentUser);
+		onLogOut(backend_url, updateAppState, setCurrentUser, navigate);
 	};
-	const TruncatedUsername = (username) => {
+	const TruncatedUsername = username => {
 		if (username) {
 			const truncatedUsername = username.length > 10 ? `${username.slice(0, 10)}...` : username;
-			return truncatedUsername
+			return truncatedUsername;
 		}
 		return '';
 	};

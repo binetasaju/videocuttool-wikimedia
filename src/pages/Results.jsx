@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, ButtonGroup, ToggleButton, Form, InputGroup } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 
-import { Upload, Download, CardHeading, CardText, ChatLeftTextFill } from 'react-bootstrap-icons';
 import { Message, BananaContext } from '@wikimedia/react.i18n';
 import { GlobalContext } from '../context/GlobalContext';
 import { VideoDetailsContext } from '../context/VideoDetailsContext';
@@ -11,7 +10,6 @@ import VideoPlayer from '../components/VideoPlayer';
 import ProgressBar from '../components/ProgressBar';
 import ENV_SETTINGS from '../env';
 import { uploadVideos } from '../utils/video';
-import { formatTime } from '../utils/time';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { List } from 'react-bootstrap-icons';
@@ -20,8 +18,7 @@ import { Image } from 'react-bootstrap';
 import Notification from '../components/Notification';
 import closeIcon from '../close.svg';
 import penicon from '../pen.svg';
-import downicon from '../Down.svg';
-import { getItemWithExpiry } from '../utils/storage';
+
 const { uploadwizard_link } = ENV_SETTINGS();
 
 const API_URL = ENV_SETTINGS().backend_url;
@@ -94,11 +91,10 @@ function Results() {
 			})
 			.split('/');
 
-		const user = getItemWithExpiry('user');
-		const { username } = JSON.parse(user);
-		const actions = getItemWithExpiry('video-settings');
+		const { username } = user;
+		const actions = localStorage.getItem('video-settings');
 		const changes = JSON.parse(actions);
-		const rotation = getItemWithExpiry('video-manipulations');
+		const rotation = localStorage.getItem('video-manipulations');
 		const rotationAmount = JSON.parse(rotation).rotate_value;
 		const titleArr = fileNameRegex.exec(title);
 		const newTitle = titleArr[1];
@@ -116,7 +112,7 @@ function Results() {
 		if (subcomment === '') {
 			subcomment += 'not edited ';
 		}
-		console.log(categories);
+
 		// To avoid merging actions into single words, add a space after each action name.
 		const videosWithDetails = videos.map((video, index) => {
 			const newExtension = video.split('.');

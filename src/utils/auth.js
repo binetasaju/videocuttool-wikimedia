@@ -1,6 +1,5 @@
 import PopupTools from 'popup-tools';
 import { socket } from './socket';
-import { setItemWithExpiry } from './storage';
 
 const onLogin = (apiUrl, setCurrentUser, updateAppState) => {
 	PopupTools.popup(`${apiUrl}/login`, 'Wiki Connect', { width: 1000, height: 600 }, (err, data) => {
@@ -13,8 +12,6 @@ const onLogin = (apiUrl, setCurrentUser, updateAppState) => {
 				}
 			});
 			setCurrentUser(data.user);
-			// persist for 7 days
-			setItemWithExpiry('user', data.user, 1000 * 60 * 60 * 24 * 7);
 			socket.emit('join', data.user);
 		} else {
 			updateAppState({
@@ -27,8 +24,7 @@ const onLogin = (apiUrl, setCurrentUser, updateAppState) => {
 	});
 };
 
-const onLogOut = (updateAppState, setCurrentUser) => {
-	localStorage.removeItem('user');
+const onLogOut = async (apiUrl, updateAppState, setCurrentUser, navigate) => {
 	setCurrentUser(null);
 	updateAppState({
 		notification: {
@@ -38,5 +34,21 @@ const onLogOut = (updateAppState, setCurrentUser) => {
 	});
 
 	document.querySelector('#logout-button').click();
+
+	// Log out from the server (clear cookies)
+	try {
+		await fetch(`${apiUrl}/logout`, {
+			method: 'GET',
+			credentials: 'include'
+		});
+		navigate('/');
+	} catch (e) {
+		updateAppState({
+			notification: {
+				type: 'error',
+				messageId: 'logout-error'
+			}
+		});
+	}
 };
 export { onLogin, onLogOut };

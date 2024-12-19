@@ -35,6 +35,7 @@
 	"logout-confirm-text": "Title of the logout confirmation popup",
 	"logout-confirm-yes": "Text of the \"Yes\" option on the logout confirmation popup\n{{Identical|Yes}}",
 	"logout-message": "Text to display when user logged out successfully",
+	"logout-error": "Error message when logout fails",
 	"mute-enable": "Text to display for the option to enable mute",
 	"mute-disable": "Text to display for the option to disable mute",
 	"new-video": "Text in front of a list of the url(s) of the uploaded video(s) \n* $1 - number of videos",

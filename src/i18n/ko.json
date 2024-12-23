@@ -27,6 +27,7 @@
 	"logout-confirm-no": "아니오",
 	"logout-confirm-text": "확실합니까?",
 	"logout-confirm-yes": "예",
+	"logout-error": "로그아웃 중 오류 발생",
 	"mute-enable": "사용",
 	"mute-disable": "사용 안 함",
 	"new-video": "새 동영상{{PLURAL:$1||}}은 여기에 위치합니다:",

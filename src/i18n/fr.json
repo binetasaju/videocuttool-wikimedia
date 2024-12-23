@@ -3,6 +3,7 @@
 		"authors": [
 			"Gomoko",
 			"Iketsi",
+			"Mahabarata",
 			"Thibaut120094",
 			"VIGNERON",
 			"Verdy p"
@@ -33,6 +34,7 @@
 	"logout-confirm-text": "Êtes-vous sûr{{GENDER:||e}} ?",
 	"logout-confirm-yes": "Oui",
 	"logout-message": "Déconnexion réussie",
+	"logout-error": "Erreur lors de la déconnexion",
 	"mute-enable": "Activer",
 	"mute-disable": "Désactiver",
 	"new-video": "{{PLURAL:$1|Votre nouvelle vidéo sera|Vos nouvelles vidéos seront}} ici :",

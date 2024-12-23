@@ -18,6 +18,7 @@
 	"logout-confirm-no": "Neen",
 	"logout-confirm-text": "Sidd Dir sécher?",
 	"logout-confirm-yes": "Jo",
+	"logout-error": "Feeler beim Ausloggen",
 	"mute-enable": "Aktivéieren",
 	"mute-disable": "Desaktivéiert",
 	"new-video": "{{PLURAL:$1|Ären neie Video|Är nei Videoe}} kommen hei hin:",

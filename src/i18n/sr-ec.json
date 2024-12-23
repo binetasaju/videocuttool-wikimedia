@@ -16,6 +16,7 @@
 	"logout-confirm-text": "Јесте ли сигурни?",
 	"logout-confirm-yes": "Да",
 	"logout-message": "Успешно сте одјављени",
+	"logout-error": "Грешка при одјављивању",
 	"mute-enable": "Омогући",
 	"mute-disable": "Онемогући",
 	"notification-error-bug-call-to-action": "Нисте очекивали ово? Пријавите проблем на $1",

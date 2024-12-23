@@ -29,6 +29,7 @@
 	"logout-confirm-text": "Əminsiniz?",
 	"logout-confirm-yes": "Bəli",
 	"logout-message": "Uğurla çıxış edildi",
+	"logout-error": "Çıxış zamanı xəta baş verdi",
 	"mute-enable": "Aktivləşdir",
 	"mute-disable": "Söndür",
 	"new-video": "Yeni {{PLURAL:$1|videonuz|videolarınız}} burada olacaq:",

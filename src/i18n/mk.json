@@ -29,6 +29,7 @@
 	"logout-confirm-text": "Дали сте сигурни?",
 	"logout-confirm-yes": "Да",
 	"logout-message": "Успешно сте одјавени",
+	"logout-error": "Грешка при одјавата",
 	"mute-enable": "Овозможи",
 	"mute-disable": "Оневозможи",
 	"new-video": "{{PLURAL:$1|Вашето ново видео ќе стои|Вашите нови видеа ќе стојат}} овде:",

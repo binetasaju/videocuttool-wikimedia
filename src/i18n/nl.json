@@ -31,6 +31,7 @@
 	"logout-confirm-text": "Weet u het zeker?",
 	"logout-confirm-yes": "Ja",
 	"logout-message": "Succesvol afgemeld",
+	"logout-error": "Fout bij het afmelden",
 	"mute-enable": "Inschakelen",
 	"mute-disable": "Uitschakelen",
 	"new-video": "Uw nieuwe video{{PLURAL:$1||'s}} komen hier:",

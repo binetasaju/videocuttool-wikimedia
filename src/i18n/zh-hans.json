@@ -36,6 +36,7 @@
 	"logout-confirm-text": "您确定吗？",
 	"logout-confirm-yes": "是",
 	"logout-message": "退出成功",
+	"logout-error": "注销时出错",
 	"mute-enable": "启用",
 	"mute-disable": "禁用",
 	"new-video": "您的新视频{{PLURAL:$1||}}将位于：",

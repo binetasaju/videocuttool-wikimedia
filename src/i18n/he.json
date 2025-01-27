@@ -32,6 +32,7 @@
 	"logout-confirm-text": "באמת?",
 	"logout-confirm-yes": "כן",
 	"logout-message": "יצאת",
+	"logout-error": "שגיאה ביציאה מהמערכת",
 	"mute-enable": "הפעלה",
 	"mute-disable": "השבתה",
 	"new-video": "{{PLURAL:$1|הסרטון החדש שלך יהיה|הסרטונים החדשים שלך יהיו}} כאן:",

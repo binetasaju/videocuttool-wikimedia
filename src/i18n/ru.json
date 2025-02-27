@@ -32,6 +32,7 @@
 	"logout-confirm-text": "Вы уверены?",
 	"logout-confirm-yes": "Да",
 	"logout-message": "Вы успешно вышли из системы",
+	"logout-error": "Ошибка при выходе из системы",
 	"mute-enable": "Включить",
 	"mute-disable": "Отключить",
 	"new-video": "{{PLURAL:$1|Ваше новое|Ваши новые}} видео {{PLURAL:$1|будет|будут}} здесь:",

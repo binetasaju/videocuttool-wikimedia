@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Nemoralis"
+			"Nemoralis",
+			"Əkrəm"
 		]
 	},
 	"copyrighted-video-upload-restriction": "Müəllif hüquqları ilə qorunan video yükləmə məhdudiyyəti",
@@ -116,5 +117,5 @@
 	"warning-duplicate-footer": "Dublikatın yüklənməsi arzuolunmaz ola bilər.",
 	"warning-duplicate-archive-footer": "Bu, faylın uyğun olmadığını və yüklənməməli olduğunu göstərə bilər.",
 	"warning-was-deleted-footer": "Təfərrüatlar üçün silinmə jurnalını yoxlayın.",
-	"welcome": "Xoş gəldiniz, $1"
+	"welcome": "Xoş gəlmisiniz, $1"
 }

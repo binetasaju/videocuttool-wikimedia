@@ -34,6 +34,7 @@
 	"logout-confirm-text": "Emin misiniz?",
 	"logout-confirm-yes": "Evet",
 	"logout-message": "Başarıyla çıkış yaptınız.",
+	"logout-error": "Çıkış yaparken hata oluştu",
 	"mute-enable": "Etkinleştir",
 	"mute-disable": "Devre dışı bırak",
 	"new-video": "Yeni Video{{PLURAL:$1|nuz|larınız}} şurada olacak:",

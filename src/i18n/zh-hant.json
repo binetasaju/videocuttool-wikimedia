@@ -29,6 +29,7 @@
 	"logout-confirm-text": "您確定嗎？",
 	"logout-confirm-yes": "是",
 	"logout-message": "登出成功",
+	"logout-error": "登出時出錯",
 	"mute-enable": "啟用",
 	"mute-disable": "停用",
 	"new-video": "您的新影片{{PLURAL:$1||}}會在此：",

@@ -29,6 +29,7 @@
 	"logout-confirm-text": "Es tu secur?",
 	"logout-confirm-yes": "Si",
 	"logout-message": "Session correctemente claudite",
+	"logout-error": "Error durante le clausura del session",
 	"mute-enable": "Activar",
 	"mute-disable": "Disactivar",
 	"new-video": "Tu nove video{{PLURAL:$1||s}} essera hic:",

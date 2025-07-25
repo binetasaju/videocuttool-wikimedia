@@ -207,3 +207,4 @@ Sohom Datta (@soda on phabricator.wikimedia.org): Joining as a co-maintainer dur
 Punith and Varun: These contributors made valuable contributions to VideoCutTool as part of the Google Summer of Code 2023. Their dedication and input led them to become co-maintainers of the tool.
 
 The collaborative efforts of these individuals have shaped VideoCutTool into a powerful and efficient tool for its users.
+"# videocuttool-wikimedia" 
